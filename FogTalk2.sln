@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FogTalk.API", "FogTalk.API\FogTalk.API.csproj", "{056F5210-D4AB-485C-9885-902569B92BBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{056F5210-D4AB-485C-9885-902569B92BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{056F5210-D4AB-485C-9885-902569B92BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{056F5210-D4AB-485C-9885-902569B92BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{056F5210-D4AB-485C-9885-902569B92BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

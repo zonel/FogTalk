@@ -6,4 +6,24 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Chat\Dto\" />
+      <Folder Include="Chat\Mapping\" />
+      <Folder Include="Friend\Dto\" />
+      <Folder Include="Friend\Mapping\" />
+      <Folder Include="Message\Dto\" />
+      <Folder Include="Message\Mapping\" />
+      <Folder Include="Notification\Dto\" />
+      <Folder Include="Notification\Mapping\" />
+      <Folder Include="User\Mapping\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FogTalk.Domain\FogTalk.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

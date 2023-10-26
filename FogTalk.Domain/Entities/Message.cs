@@ -10,8 +10,8 @@ public class Message
     public MessageStatus MessageStatus { get; set; }
 
     public int SenderId { get; set; }
-    public int ReceiverId { get; set; }
+    public int ChatId { get; set; }
 
-    public User Sender { get; set; } 
-    public Chat Destination  { get; set; } 
+    public User Sender { get; set; }
+    public Chat ReceivingChat  { get; set; } 
 }

@@ -3,14 +3,12 @@ using FogTalk.Infrastructure.ServicesConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//loading environmental variables from .env file
+DotNetEnv.Env.Load();
+
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services
+    .AddSwaggerGen()
     .AddInfrastructure(builder.Configuration)
     .AddPresentation()
     .AddEndpointsApiExplorer()
@@ -18,7 +16,8 @@ builder.Services
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region HTTP Pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -32,3 +31,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+#endregion

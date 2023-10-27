@@ -26,7 +26,9 @@ public class MessagesConfiguration : IEntityTypeConfiguration<Message>
         builder
             .HasOne(m => m.Sender)
             .WithMany(u => u.SentMessages)
-            .HasForeignKey(m => m.SenderId);
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
         
         //Receiver
         builder

@@ -24,8 +24,8 @@ public class UsersConfiguration : IEntityTypeConfiguration<User>
         //ReceivedMessages
         builder
             .HasMany(u => u.ReceivedMessages)
-            .WithOne(m => m.Sender)
-            .HasForeignKey(m => m.SenderId);
+            .WithOne(m => m.Receiver)
+            .HasForeignKey(m => m.ReceiverId);
 
         //Chats
         builder

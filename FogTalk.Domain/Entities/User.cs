@@ -9,6 +9,8 @@ public class User
     public string Bio { get; set; } 
     public string ProfilePicture { get; set; } 
 
+    //public int ReceivedMessagesId { get; set; }
+    
     public virtual ICollection<Message> SentMessages { get; set; } 
     public virtual ICollection<Message> ReceivedMessages { get; set; } 
     public virtual ICollection<Chat> Chats { get; set; } 

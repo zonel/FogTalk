@@ -1,4 +1,4 @@
-﻿
+
 using FogTalk.Application.Abstraction.Messaging;
 using FogTalk.Application.Chat.Dto;
 

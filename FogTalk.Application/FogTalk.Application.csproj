@@ -8,10 +8,15 @@
 
     <ItemGroup>
       <PackageReference Include="Mapster" Version="7.4.1-pre01" />
+      <PackageReference Include="Mapster" Version="7.4.1-pre01" />
       <PackageReference Include="MediatR" Version="12.1.1" />
     </ItemGroup>
 
     <ItemGroup>
+<<<<<<< HEAD
+=======
+      <Folder Include="Chat\Mapping\" />
+>>>>>>> origin/master
       <Folder Include="Friend\Dto\" />
       <Folder Include="Friend\Mapping\" />
       <Folder Include="Message\Dto\" />

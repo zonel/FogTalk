@@ -1,6 +1,26 @@
-﻿namespace FogTalk.API.Controllers;
+﻿using FogTalk.Application.Chat.Commands.Create;
+using FogTalk.Application.Chat.Dto;
+using FogTalk.Application.User.Commands.Register;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
-public class ChatController
+namespace FogTalk.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ChatController : ControllerBase
 {
+    private readonly IMediator _mediator;
     
+    public ChatController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] ChatDto registerChatDto )
+    {
+        await _mediator.Send(new CreateChatCommand(registerChatDto));
+        return Ok();
+    }
 }

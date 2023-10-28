@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="DotNetEnv" Version="2.5.0" />
+        <PackageReference Include="MediatR" Version="12.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
           <PrivateAssets>all</PrivateAssets>
@@ -24,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\FogTalk.Application\FogTalk.Application.csproj" />
       <ProjectReference Include="..\FogTalk.Infrastructure\FogTalk.Infrastructure.csproj" />
     </ItemGroup>
 

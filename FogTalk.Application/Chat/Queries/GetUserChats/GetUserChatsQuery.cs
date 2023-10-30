@@ -1,6 +1,6 @@
-﻿namespace FogTalk.Application.Chat.Queries;
+﻿using FogTalk.Application.Abstraction.Messaging;
+using FogTalk.Application.Chat.Dto;
 
-public class GetUserChatsQuery
-{
-    
-}
+namespace FogTalk.Application.Chat.Queries;
+
+public record GetUserChatsQuery : IQuery<IEnumerable<ChatDto>>;

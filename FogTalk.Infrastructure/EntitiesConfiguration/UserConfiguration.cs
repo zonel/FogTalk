@@ -12,8 +12,8 @@ public class UsersConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.UserName).IsRequired();
         builder.Property(u => u.Password).IsRequired();
         builder.Property(u => u.Email).IsRequired();
-        builder.Property(u => u.Bio).IsRequired();
-        builder.Property(u => u.ProfilePicture).IsRequired();
+        builder.Property(u => u.Bio).IsRequired(false);
+        builder.Property(u => u.ProfilePicture).IsRequired(false);
         
         //SentMessages
         builder

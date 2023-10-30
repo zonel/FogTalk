@@ -9,5 +9,9 @@ public class ChatMappings : IRegister
         config.ForType<ChatDto, Domain.Entities.Chat>()
             .Map(dest => dest.Name, src => src.Name)
             .Map(dest => dest.IsGroupChat, src => src.IsGroupChat);
+        
+        config.ForType<Domain.Entities.Chat, ChatDto>()
+            .Map(dest => dest.Name, src => src.Name)
+            .Map(dest => dest.IsGroupChat, src => src.IsGroupChat);
     }
 }

@@ -17,11 +17,11 @@ public class CreateChatCommandHandler : ICommandHandler<CreateChatCommand, int>
     }
     #endregion
 
-    public async Task<Result<int>> Handle(CreateChatCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {
         Domain.Entities.Chat chat = request.ChatDto.Adapt<Domain.Entities.Chat>();
         await _repository.AddAsync(chat);
         request.ChatDto.Name = request.ChatDto.Name.Trim();
-        return Result<int>.Success(chat.Id);
+        return chat.Id;
     }
 }

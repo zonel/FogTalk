@@ -11,7 +11,7 @@ public static class ServiceCollection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddTransient<IRequestHandler<CreateChatCommand, Result<int>>, CreateChatCommandHandler>(); // Register the CreateChatCommand handler
+        services.AddTransient<IRequestHandler<CreateChatCommand, int>, CreateChatCommandHandler>(); // Register the CreateChatCommand handler
         return services;
     }
 }

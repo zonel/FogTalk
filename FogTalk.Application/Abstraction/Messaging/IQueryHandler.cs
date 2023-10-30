@@ -3,7 +3,7 @@ using MediatR;
 
 namespace FogTalk.Application.Abstraction.Messaging;
 
-public interface IQueryHandler<TQuery, TResponse> : IRequestHandler<TQuery, Result<TResponse>> 
+public interface IQueryHandler<TQuery, TResponse> : IRequestHandler<TQuery, TResponse> 
     where TQuery : IQuery<TResponse>
 {
 }

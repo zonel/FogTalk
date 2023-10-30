@@ -5,8 +5,7 @@ namespace FogTalk.Application.User.Commands.Register;
 
 internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand>
 {
-    public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        return Result.Success();
     }
 }

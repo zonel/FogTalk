@@ -1,8 +1,7 @@
 ﻿using FogTalk.Application.Abstraction.Messaging;
+using FogTalk.Application.Security.Dto;
+using FogTalk.Application.User.Dto;
 
 namespace FogTalk.Application.User.Commands.Authenticate;
 
-public class AuthenticateUserCommand : ICommand
-{
-    
-}
+public record AuthenticateUserCommand(LoginUserDto loginUserDto) : ICommand<JwtDto>;

@@ -19,7 +19,6 @@
       <Folder Include="Message\Mapping\" />
       <Folder Include="Notification\Dto\" />
       <Folder Include="Notification\Mapping\" />
-      <Folder Include="User\Mapping\" />
     </ItemGroup>
 
     <ItemGroup>

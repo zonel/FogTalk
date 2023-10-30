@@ -21,4 +21,8 @@
       <ProjectReference Include="..\FogTalk.Domain\FogTalk.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Auth\" />
+    </ItemGroup>
+
 </Project>

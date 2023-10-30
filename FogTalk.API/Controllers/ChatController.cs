@@ -1,5 +1,6 @@
 ﻿using FogTalk.Application.Chat.Commands.Create;
 using FogTalk.Application.Chat.Dto;
+using FogTalk.Application.Chat.Queries;
 using FogTalk.Application.User.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,4 +24,13 @@ public class ChatController : ControllerBase
         await _mediator.Send(new CreateChatCommand(registerChatDto));
         return Ok();
     }
+    
+    //make it based on JWT claim 
+    [HttpGet]
+    public async Task<IEnumerable<ChatDto>> GetUserChatsQuery()
+    {
+        return await _mediator.Send(new GetUserChatsQuery());
+    }
+
+    
 }

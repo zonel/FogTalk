@@ -1,4 +1,5 @@
-﻿using FogTalk.Application.Abstraction;
+﻿using System.Text;
+using FogTalk.Application.Abstraction;
 using FogTalk.Application.Security;
 using FogTalk.Domain.Entities;
 using FogTalk.Domain.Repositories;
@@ -10,13 +11,45 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace FogTalk.Infrastructure.ServicesConfiguration;
 
 public static class ServiceCollection
 {
+    private const string AuthOptionsSectionName = "AuthOptions";
+    
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<AuthOptions>(configuration.GetRequiredSection(AuthOptionsSectionName));
+        services.AddAuthentication(o =>
+        {
+            o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        });
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                var authOptions = new AuthOptions()
+                {
+                    Audience = configuration.GetSection(AuthOptionsSectionName).GetSection("Audience").Value,
+                    Issuer = configuration.GetSection(AuthOptionsSectionName).GetSection("Issuer").Value,
+                    SigningKey = configuration.GetSection(AuthOptionsSectionName).GetSection("SigningKey").Value,
+                    Expiry = TimeSpan.FromHours(1)
+                };
+
+
+                options.Audience = authOptions.Audience;
+                options.IncludeErrorDetails = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authOptions.Issuer,
+                    ClockSkew = TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.SigningKey))
+                };
+            });
+        
         services.AddDbContext<FogTalkDbContext>(options =>
         {
             options.UseSqlServer(Environment.GetEnvironmentVariable("FOGTALK_CONNECTION_STRING"));

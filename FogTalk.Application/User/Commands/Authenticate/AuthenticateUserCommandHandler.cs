@@ -2,6 +2,7 @@
 using FogTalk.Application.Security;
 using FogTalk.Application.Security.Dto;
 using FogTalk.Application.User.Dto;
+using FogTalk.Domain.Exceptions;
 using FogTalk.Domain.Repositories;
 
 namespace FogTalk.Application.User.Commands.Authenticate;
@@ -25,20 +26,10 @@ public class AuthenticateUserCommandHandler : ICommandHandler<AuthenticateUserCo
     public async Task<JwtDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByEmailAsync(request.loginUserDto.Email);
-        if (user == null)
-        {
-            throw new NullReferenceException();
-        }
-        
-        if (!_passwordManager.Validate(request.loginUserDto.Password, user.Password))
-        {
-            throw new NullReferenceException();
-        }
+        if (user == null) throw new InvalidCredentialsException("Invalid username or password");
+        if (!_passwordManager.Validate(request.loginUserDto.Password, user.Password)) throw new InvalidCredentialsException("Invalid username or password");
         
         var jwt = _authenticator.CreateToken(user.Id);
-        
         return jwt;
     }
-
-
 }

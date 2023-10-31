@@ -1,4 +1,5 @@
-﻿using FogTalk.Application.Security;
+﻿using FogTalk.Application.Abstraction;
+using FogTalk.Application.Security;
 using FogTalk.Domain.Entities;
 using FogTalk.Domain.Repositories;
 using FogTalk.Infrastructure.Auth;
@@ -25,6 +26,7 @@ public static class ServiceCollection
         services.AddScoped<IPasswordManager, PasswordManager>(); // Register the PasswordManager
         services.AddScoped<IUserRepository, UserRepository>(); // Register the UserRepository
         services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+        services.AddScoped<IDatabaseSeeder, DatabaseSeeder>(); // Register the DatabaseSeeder
         
         return services;
     }

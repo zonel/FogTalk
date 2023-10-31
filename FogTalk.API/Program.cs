@@ -1,6 +1,8 @@
 using FogTalk.API.Configuration;
 using FogTalk.Application.Abstraction;
 using FogTalk.Application.Configuration;
+using FogTalk.Application.Security;
+using FogTalk.Infrastructure.Exceptions;
 using FogTalk.Infrastructure.Persistence;
 using FogTalk.Infrastructure.ServicesConfiguration;
 
@@ -47,6 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

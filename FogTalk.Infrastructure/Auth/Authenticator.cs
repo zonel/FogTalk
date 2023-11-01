@@ -39,8 +39,7 @@ public class Authenticator : IAuthenticator
         var now = DateTime.Now;
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, userId.ToString()),
-            new(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
+            new(JwtRegisteredClaimNames.Sid, userId.ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 

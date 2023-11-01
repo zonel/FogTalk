@@ -23,7 +23,7 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
     public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        Domain.Entities.User user = request.registerUserDto.Adapt<Domain.Entities.User>();
+        Domain.Entities.User user = request.UserDto.Adapt<Domain.Entities.User>();
         user.CreatedAt = DateTime.Now;
         user.Password =  _passwordManager.Secure(user.Password);
         await _repository.AddAsync(user);

@@ -8,7 +8,7 @@ public class UserMappings : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.ForType<Domain.Entities.User, RegisterUserDto>()
+        config.ForType<Domain.Entities.User, UserDto>()
             .Map(dest => dest.UserName, src => src.UserName)
             .Map(dest => dest.Password, src => src.Password)
             .Map(dest => dest.Email, src => src.Email)
@@ -16,9 +16,15 @@ public class UserMappings : IRegister
             .Map(dest => dest.ProfilePicture, src => src.ProfilePicture);
             
         
-        config.ForType<RegisterUserDto, Domain.Entities.User>()
+        config.ForType<UserDto, Domain.Entities.User>()
             .Map(dest => dest.UserName, src => src.UserName)
             .Map(dest => dest.Password, src => src.Password)
+            .Map(dest => dest.Email, src => src.Email)
+            .Map(dest => dest.Bio, src => src.Bio)
+            .Map(dest => dest.ProfilePicture, src => src.ProfilePicture);
+        
+        config.ForType<Domain.Entities.User, ShowUserDto>()
+            .Map(dest => dest.UserName, src => src.UserName)
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.Bio, src => src.Bio)
             .Map(dest => dest.ProfilePicture, src => src.ProfilePicture);

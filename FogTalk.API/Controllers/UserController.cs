@@ -1,12 +1,15 @@
-﻿using FogTalk.Application.Chat.Commands.Create;
+﻿using System.Security.Claims;
+using FogTalk.Application.Chat.Commands.Create;
 using FogTalk.Application.Chat.Dto;
 using FogTalk.Application.Security.Dto;
 using FogTalk.Application.User.Commands.Authenticate;
 using FogTalk.Application.User.Commands.LogOut;
 using FogTalk.Application.User.Commands.Register;
 using FogTalk.Application.User.Dto;
+using FogTalk.Application.User.Queries.Get;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace FogTalk.API.Controllers;
 
@@ -22,9 +25,9 @@ public class UserController : ControllerBase
     }
     
     [HttpPost("register")]
-    public async Task<ActionResult> Create([FromBody] RegisterUserDto registerUserDto )
+    public async Task<ActionResult> Create([FromBody] UserDto userDto )
     {
-        await _mediator.Send(new RegisterUserCommand(registerUserDto));
+        await _mediator.Send(new RegisterUserCommand(userDto));
         return Ok();
     }
     
@@ -39,5 +42,12 @@ public class UserController : ControllerBase
     {
         await _mediator.Send(new LogOutUserCommand(jwtDto));
         return Ok();
+    }
+    
+    [HttpGet]
+    public async Task<ShowUserDto> GetCurrentUser()
+    {
+        var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        return await _mediator.Send(new GetUserQuery(Convert.ToInt32(userId)));
     }
 }

@@ -17,5 +17,10 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = 400;
             await context.Response.WriteAsync("[400] Invalid credentials - " + e.Message);
         }
+        catch (TokenAlreadyBlacklistedException e)
+        {
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsync("[400] TokenAlreadyBlacklistedException - " + e.Message);
+        }
     }
 }

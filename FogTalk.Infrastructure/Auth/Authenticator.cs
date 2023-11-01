@@ -3,6 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using FogTalk.Application.Security;
 using FogTalk.Application.Security.Dto;
+using FogTalk.Domain.Exceptions;
+using FogTalk.Domain.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,8 +19,9 @@ public class Authenticator : IAuthenticator
     private readonly string _audience;
     private readonly SigningCredentials _signingCredentials;
     private readonly JwtSecurityTokenHandler _jwtSecurityToken = new JwtSecurityTokenHandler();
+    private readonly IJtiRepository _jtiRepository;
 
-    public Authenticator(IOptions<AuthOptions> options)
+    public Authenticator(IOptions<AuthOptions> options, IJtiRepository jtiRepository)
     {
         _clock = DateTime.Now;
         _issuer = options.Value.Issuer;
@@ -26,6 +30,8 @@ public class Authenticator : IAuthenticator
         _signingCredentials = new SigningCredentials(new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(options.Value.SigningKey)),
             SecurityAlgorithms.HmacSha256);
+
+        _jtiRepository = jtiRepository;
     }
     
     public JwtDto CreateToken(int userId)
@@ -35,6 +41,7 @@ public class Authenticator : IAuthenticator
         {
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
         var expires = now.Add(_expiry);
@@ -45,5 +52,22 @@ public class Authenticator : IAuthenticator
         {
             AccessToken = token
         };
+    }
+
+    //TODO: change to async
+    public void InvalidateTokenAsync(JwtDto token)
+    {
+        var jti = _jtiRepository.ExtractJtiFromToken(token.AccessToken);
+        var jwtBlacklistedAlready = _jtiRepository.IsJtiBlacklisted(jti);
+        
+        if (jwtBlacklistedAlready)
+        {
+            throw new TokenAlreadyBlacklistedException();
+        }
+        else
+        {
+            // Adds token jti claim to blacklist.
+            _jtiRepository.AddJtiToBlacklist(jti);
+        }
     }
 }

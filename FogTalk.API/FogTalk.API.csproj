@@ -19,12 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\FogTalk.Application\FogTalk.Application.csproj" />
       <ProjectReference Include="..\FogTalk.Infrastructure\FogTalk.Infrastructure.csproj" />
     </ItemGroup>

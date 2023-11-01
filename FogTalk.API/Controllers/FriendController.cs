@@ -1,6 +1,10 @@
-﻿namespace FogTalk.API.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
 
-public class FriendController
+namespace FogTalk.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class FriendController : ControllerBase
 {
     
 }

@@ -1,6 +1,8 @@
-﻿namespace FogTalk.Application.User.Commands.LogOut;
+﻿using FogTalk.Application.Abstraction.Messaging;
+using FogTalk.Application.Security.Dto;
 
-public class LogOutUserCommand
+namespace FogTalk.Application.User.Commands.LogOut;
+
+public record LogOutUserCommand(JwtDto jwtDto) : ICommand<JwtDto>
 {
-    
 }

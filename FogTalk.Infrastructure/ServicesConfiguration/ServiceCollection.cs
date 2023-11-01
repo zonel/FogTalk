@@ -53,13 +53,14 @@ public static class ServiceCollection
         services.AddDbContext<FogTalkDbContext>(options =>
         {
             options.UseSqlServer(Environment.GetEnvironmentVariable("FOGTALK_CONNECTION_STRING"));
-        });
+        }).AddScoped<FogTalkDbContext>();
         services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddScoped<IAuthenticator, Authenticator>(); // Register the Authenticator
         services.AddScoped<IPasswordManager, PasswordManager>(); // Register the PasswordManager
         services.AddScoped<IUserRepository, UserRepository>(); // Register the UserRepository
         services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<IDatabaseSeeder, DatabaseSeeder>(); // Register the DatabaseSeeder
+        services.AddScoped<IJtiRepository, JtiRepository>(); // Register the JtiRepository
         
         return services;
     }

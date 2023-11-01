@@ -1,6 +1,9 @@
-﻿namespace FogTalk.Application.User.Queries.Get;
+﻿using FogTalk.Application.Abstraction.Messaging;
+using FogTalk.Application.Security.Dto;
+using FogTalk.Application.User.Dto;
 
-public class GetUserQuery
+namespace FogTalk.Application.User.Queries.Get;
+
+public record GetUserQuery(int userId) : IQuery<ShowUserDto>
 {
-    
 }

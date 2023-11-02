@@ -1,6 +1,7 @@
 ﻿using FogTalk.Application.Abstraction.Messaging;
 using FogTalk.Application.Chat.Commands.Create;
 using FogTalk.Application.Security;
+using FogTalk.Domain.Exceptions;
 using FogTalk.Domain.Repositories;
 using FogTalk.Domain.Shared;
 using Mapster;
@@ -13,16 +14,24 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
     private readonly IGenericRepository<Domain.Entities.User, int> _repository;
     private readonly IPasswordManager _passwordManager;
+    private readonly IUserRepository _userRepository;
 
-    public RegisterUserCommandHandler(IGenericRepository<Domain.Entities.User, int> repository, IPasswordManager passwordManager)
+    public RegisterUserCommandHandler(IGenericRepository<Domain.Entities.User, int> repository, IPasswordManager passwordManager, IUserRepository userRepository)
     {
         _passwordManager = passwordManager;
         _repository = repository;
+        _userRepository = userRepository;
     }
     #endregion
 
     public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
+        if (await _userRepository.UserExistsAsync(u => u.UserName == request.UserDto.UserName))
+            throw new UsernameTakenException();
+        if (await _userRepository.UserExistsAsync(u => u.Email == request.UserDto.Email))
+            throw new EmailTakenException();
+        
+        
         Domain.Entities.User user = request.UserDto.Adapt<Domain.Entities.User>();
         user.CreatedAt = DateTime.Now;
         user.Password =  _passwordManager.Secure(user.Password);

@@ -8,6 +8,7 @@ using FogTalk.Application.User.Commands.Register;
 using FogTalk.Application.User.Commands.Update;
 using FogTalk.Application.User.Dto;
 using FogTalk.Application.User.Queries.Get;
+using FogTalk.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,16 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult> Create([FromBody] UserDto userDto )
     {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+
+            return BadRequest(new { errors });
+        }
+        
         await _mediator.Send(new RegisterUserCommand(userDto));
         return Ok();
     }

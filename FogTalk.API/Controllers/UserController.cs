@@ -16,8 +16,8 @@ using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace FogTalk.API.Controllers;
 
-[Authorize]
 [ApiController]
+[Authorize(Policy = "JtiPolicy")]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
@@ -53,6 +53,7 @@ public class UserController : ControllerBase
         return await _mediator.Send(new AuthenticateUserCommand(loginUserDto));
     }
     
+    [AllowAnonymous]
     [HttpPost("logout")]
     public async Task<ActionResult> LogOut([FromBody] JwtDto jwtDto)
     {
@@ -61,7 +62,6 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("profile")]
-    [Authorize]
     public async Task<ShowUserDto> GetCurrentUser()
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;

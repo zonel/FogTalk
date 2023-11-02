@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FogTalk.Infrastructure.ServicesConfiguration;
 
@@ -61,6 +62,16 @@ public static class ServiceCollection
         services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<IDatabaseSeeder, DatabaseSeeder>(); // Register the DatabaseSeeder
         services.AddScoped<IJtiRepository, JtiRepository>(); // Register the JtiRepository
+        
+        
+        services.AddScoped<IAuthorizationHandler, JtiAuthorizationHandler>(); // Register the JtiAuthorizationHandler
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("JtiPolicy", policy =>
+            {
+                policy.Requirements.Add(new JtiRequirement());
+            });
+        });
         
         return services;
     }

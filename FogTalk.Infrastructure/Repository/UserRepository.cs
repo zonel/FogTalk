@@ -1,4 +1,5 @@
-﻿using FogTalk.Domain.Entities;
+﻿using System.Linq.Expressions;
+using FogTalk.Domain.Entities;
 using FogTalk.Domain.Repositories;
 using FogTalk.Domain.ValueObjects;
 using FogTalk.Infrastructure.Persistence;
@@ -18,8 +19,16 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetByIdAsync(int id)
     {
-        return await _dbContext.Users
+        var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == id);
+        return user;
+    }
+    
+    public async Task<bool> UserExistsAsync(Expression<Func<User, bool>> predicate)
+    {
+        var userExists = await _dbContext.Users
+            .AnyAsync(predicate);
+        return userExists;
     }
 
     public async Task<User> GetByEmailAsync(string email)

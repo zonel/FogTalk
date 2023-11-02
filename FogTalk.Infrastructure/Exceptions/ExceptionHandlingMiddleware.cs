@@ -55,6 +55,7 @@ public class ExceptionHandlingMiddleware : IMiddleware
                 UsernameTakenException usernameTaken => $"[400] {usernameTaken.GetType().Name}",
                 EmailTakenException emailTaken => $"[400] {emailTaken.GetType().Name}",
                 BadHttpRequestException badHttpRequest => $"Exception occurred - {badHttpRequest.Message}",
+                IdempotencyException idempotencyException => $"[400] {idempotencyException.GetType().Name} - {idempotencyException.Message}",
                 _ => "An unexpected error occurred."
             };
 

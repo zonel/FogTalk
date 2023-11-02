@@ -6,6 +6,7 @@ using FogTalk.Application.Security.Dto;
 using FogTalk.Application.User.Commands.Authenticate;
 using FogTalk.Application.User.Commands.LogOut;
 using FogTalk.Application.User.Commands.Register;
+using FogTalk.Application.User.Commands.Update;
 using FogTalk.Application.User.Dto;
 using FogTalk.Application.User.Queries.Get;
 using FogTalk.Domain.Shared;
@@ -23,6 +24,7 @@ public static class ServiceCollection
         services.AddTransient<IRequestHandler<AuthenticateUserCommand, JwtDto>, AuthenticateUserCommandHandler>();
         services.AddTransient<IRequestHandler<LogOutUserCommand, JwtDto>, LogOutUserCommandHandler>();
         services.AddTransient<IRequestHandler<GetUserQuery, ShowUserDto>, GetUserQueryHandler>();
+        services.AddTransient<IRequestHandler<UpdateUserCommand>, UpdateUserCommandHandler>();
         return services;
     }
 }

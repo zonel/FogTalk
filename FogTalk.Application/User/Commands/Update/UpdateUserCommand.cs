@@ -1,6 +1,8 @@
-﻿namespace FogTalk.Application.User.Commands.Update;
+﻿using FogTalk.Application.Abstraction.Messaging;
+using FogTalk.Application.User.Dto;
 
-public class UpdateUserCommand
+namespace FogTalk.Application.User.Commands.Update;
+
+public record UpdateUserCommand(UpdateUserDto userDto, int userId) : ICommand
 {
-    
 }

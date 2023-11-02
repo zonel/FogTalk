@@ -5,16 +5,19 @@ using FogTalk.Application.Security.Dto;
 using FogTalk.Application.User.Commands.Authenticate;
 using FogTalk.Application.User.Commands.LogOut;
 using FogTalk.Application.User.Commands.Register;
+using FogTalk.Application.User.Commands.Update;
 using FogTalk.Application.User.Dto;
 using FogTalk.Application.User.Queries.Get;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace FogTalk.API.Controllers;
 
-[Route("api/[controller]")]
+[Authorize]
 [ApiController]
+[Route("api/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -24,6 +27,7 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
     
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult> Create([FromBody] UserDto userDto )
     {
@@ -31,6 +35,7 @@ public class UserController : ControllerBase
         return Ok();
     }
     
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<JwtDto> Login([FromBody] LoginUserDto loginUserDto)
     {
@@ -44,10 +49,19 @@ public class UserController : ControllerBase
         return Ok();
     }
     
-    [HttpGet]
+    [HttpGet("profile")]
+    [Authorize]
     public async Task<ShowUserDto> GetCurrentUser()
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
         return await _mediator.Send(new GetUserQuery(Convert.ToInt32(userId)));
+    }
+    
+    [HttpPut("profile")]
+    public async Task<ActionResult> UpdateCurrentUser([FromBody] UpdateUserDto userDto)
+    {
+        var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        await _mediator.Send(new UpdateUserCommand(userDto, Convert.ToInt32(userId)));
+        return Ok();
     }
 }

@@ -29,20 +29,17 @@ public class ChatController : ControllerBase
         return Ok();
     }
     
-    //make it based on JWT claim 
     [HttpGet]
     public async Task<IEnumerable<ChatDto>> GetUserChatsQuery()
     {
-        return await _mediator.Send(new GetUserChatsQuery());
+        var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        return await _mediator.Send(new GetUserChatsQuery(Convert.ToInt32(id)));
     }
     
     [HttpGet("/{chatId}")]
     public async Task<ChatDto> GetChatDetails([FromRoute] int chatId)
     {
         var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        return await _mediator.Send(new GetChatByIdQuery(Convert.ToInt32(id)));
+        return await _mediator.Send(new GetChatByIdQuery(Convert.ToInt32(id), chatId));
     }
-
-
-    
 }

@@ -7,16 +7,16 @@ namespace FogTalk.Application.Chat.Queries.GetById;
 
 public class GetChatByIdQueryHandler : IQueryHandler<GetChatByIdQuery, ChatDto>
 {
-    private readonly IGenericRepository<Domain.Entities.Chat, int> _chatRepository;
+    private readonly IChatRepository _chatRepository;
 
-    public GetChatByIdQueryHandler(IGenericRepository<Domain.Entities.Chat, int> chatRepository)
+    public GetChatByIdQueryHandler(IChatRepository chatRepository)
     {
         _chatRepository = chatRepository;
     }
     
     public async Task<ChatDto> Handle(GetChatByIdQuery request, CancellationToken cancellationToken)
     {
-        var chat = await _chatRepository.GetByIdAsync(request.chatId);
+        var chat = await _chatRepository.GetChatForUserByIdAsync(request.chatId, request.userId);
         var chatDto = chat.Adapt<ChatDto>();
         return chatDto;
     }

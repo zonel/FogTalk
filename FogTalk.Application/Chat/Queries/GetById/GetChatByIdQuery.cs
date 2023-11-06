@@ -3,4 +3,4 @@ using FogTalk.Application.Chat.Dto;
 
 namespace FogTalk.Application.Chat.Queries.GetById;
 
-public record GetChatByIdQuery(int chatId) : IQuery<ChatDto>;
+public record GetChatByIdQuery(int userId,int chatId) : IQuery<ChatDto>;

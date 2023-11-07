@@ -6,38 +6,6 @@ namespace FogTalk.Infrastructure.Exceptions;
 
 public class ExceptionHandlingMiddleware : IMiddleware
 {
-    // public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-    // {
-    //     try
-    //     {
-    //         await next(context);
-    //     }
-    //     catch (InvalidCredentialsException e)
-    //     {
-    //         context.Response.StatusCode = 400;
-    //         await context.Response.WriteAsync("[400] Invalid credentials - " + e.Message);
-    //     }
-    //     catch (TokenAlreadyBlacklistedException e)
-    //     {
-    //         context.Response.StatusCode = 400;
-    //         await context.Response.WriteAsync("[400] TokenAlreadyBlacklistedException - " + e.Message);
-    //     }
-    //     catch (UsernameTakenException e)
-    //     {
-    //         context.Response.StatusCode = 400;
-    //         await context.Response.WriteAsync("[400] UsernameTakenException - ");
-    //     }
-    //     catch (EmailTakenException e)
-    //     {
-    //         context.Response.StatusCode = 400;
-    //         await context.Response.WriteAsync("[400] EmailTakenException - ");
-    //     }
-    //     catch (BadHttpRequestException e)
-    //     {
-    //         //context.Response.StatusCode = 400;
-    //         await context.Response.WriteAsync("Exception occured - " + e.Message);
-    //     }
-    // }
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
@@ -56,11 +24,10 @@ public class ExceptionHandlingMiddleware : IMiddleware
                 EmailTakenException emailTaken => $"[400] {emailTaken.GetType().Name}",
                 BadHttpRequestException badHttpRequest => $"Exception occurred - {badHttpRequest.Message}",
                 IdempotencyException idempotencyException => $"[400] {idempotencyException.GetType().Name} - {idempotencyException.Message}",
-                _ => "An unexpected error occurred."
+                _ => "[Middleware] An unexpected error occurred."
             };
 
             await context.Response.WriteAsync(errorMessage);
         }
     }
-
 }

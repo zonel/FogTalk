@@ -1,6 +1,5 @@
-﻿namespace FogTalk.Application.Chat.Commands.Delete;
+﻿using FogTalk.Application.Abstraction.Messaging;
 
-public class DeleteChatCommand
-{
-    
-}
+namespace FogTalk.Application.Chat.Commands.Delete;
+
+public record DeleteChatCommand(int userId, int chatId) : ICommand;

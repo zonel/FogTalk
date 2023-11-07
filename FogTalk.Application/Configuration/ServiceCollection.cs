@@ -19,12 +19,8 @@ public static class ServiceCollection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddTransient<IRequestHandler<CreateChatCommand, int>, CreateChatCommandHandler>(); // Register the CreateChatCommand handler
-        services.AddTransient<IRequestHandler<RegisterUserCommand>, RegisterUserCommandHandler>(); // Register the CreateChatCommand handler
-        services.AddTransient<IRequestHandler<AuthenticateUserCommand, JwtDto>, AuthenticateUserCommandHandler>();
-        services.AddTransient<IRequestHandler<LogOutUserCommand, JwtDto>, LogOutUserCommandHandler>();
-        services.AddTransient<IRequestHandler<GetUserQuery, ShowUserDto>, GetUserQueryHandler>();
-        services.AddTransient<IRequestHandler<UpdateUserCommand>, UpdateUserCommandHandler>();
+        services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()); });
+        
         return services;
     }
 }

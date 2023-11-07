@@ -62,6 +62,7 @@ public static class ServiceCollection
         services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<IDatabaseSeeder, DatabaseSeeder>(); // Register the DatabaseSeeder
         services.AddScoped<IJtiRepository, JtiRepository>(); // Register the JtiRepository
+        services.AddScoped<IChatRepository, ChatRepository>(); // Register the ChatRepository
         
         
         services.AddScoped<IAuthorizationHandler, JtiAuthorizationHandler>(); // Register the JtiAuthorizationHandler

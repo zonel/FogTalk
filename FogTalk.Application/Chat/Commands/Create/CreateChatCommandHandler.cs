@@ -20,8 +20,9 @@ public class CreateChatCommandHandler : ICommandHandler<CreateChatCommand, int>
     public async Task<int> Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {
         Domain.Entities.Chat chat = request.ChatDto.Adapt<Domain.Entities.Chat>();
+        chat.Name = chat.Name.Trim();
+        chat.CreatedAt = DateTime.Now;
         await _repository.AddAsync(chat);
-        request.ChatDto.Name = request.ChatDto.Name.Trim();
         return chat.Id;
     }
 }

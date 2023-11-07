@@ -1,6 +1,6 @@
-﻿namespace FogTalk.Application.Chat.Commands.Update;
+﻿using FogTalk.Application.Abstraction.Messaging;
+using FogTalk.Application.Chat.Dto;
 
-public class UpdateChatCommand
-{
-    
-}
+namespace FogTalk.Application.Chat.Commands.Update;
+
+public record UpdateChatCommand(int userId, UpdateChatDto chat) : ICommand;

@@ -1,8 +1,13 @@
 ﻿using FogTalk.Application.Chat.Commands.Create;
+using FogTalk.Application.Chat.Commands.Delete;
+using FogTalk.Application.Chat.Commands.Join;
+using FogTalk.Application.Chat.Commands.Leave;
+using FogTalk.Application.Chat.Commands.Update;
 using FogTalk.Application.Chat.Dto;
 using FogTalk.Application.Chat.Queries;
 using FogTalk.Application.Chat.Queries.GetById;
 using FogTalk.Application.User.Commands.Register;
+using FogTalk.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +34,33 @@ public class ChatController : ControllerBase
         return Ok();
     }
     
+    [HttpPost("join")]
+    public async Task<IActionResult> Join([FromBody] int chatId)
+    {
+            var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+            await _mediator.Send(new JoinChatCommand(Convert.ToInt32(id), chatId));
+            return Ok();
+    }
+    
+    [HttpPost("leave")]
+    public async Task<IActionResult> Leave([FromBody] int chatId)
+    {
+        try
+        {
+            var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+            await _mediator.Send(new LeaveChatCommand(Convert.ToInt32(id), chatId));
+            return Ok();
+        }
+        catch (IdempotencyException e)
+        {
+            return Conflict(e.Message);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
     [HttpGet]
     public async Task<IEnumerable<ChatDto>> GetUserChatsQuery()
     {
@@ -36,10 +68,25 @@ public class ChatController : ControllerBase
         return await _mediator.Send(new GetUserChatsQuery(Convert.ToInt32(id)));
     }
     
-    [HttpGet("/{chatId}")]
+    [HttpGet("{chatId}")]
     public async Task<ChatDto> GetChatDetails([FromRoute] int chatId)
     {
-        var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        return await _mediator.Send(new GetChatByIdQuery(Convert.ToInt32(id), chatId));
+        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
+        return await _mediator.Send(new GetChatByIdQuery(id, chatId));
     }
+    
+    [HttpPut]
+    public async Task UpdateChat([FromBody] UpdateChatDto UpdateChatDto)
+    {
+        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
+        await _mediator.Send(new UpdateChatCommand(id ,UpdateChatDto));
+    }
+    
+    [HttpDelete]
+    public async Task DeleteChat([FromBody] int chatId)
+    {
+        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
+        await _mediator.Send(new DeleteChatCommand(id, chatId));
+    }
+    
 }

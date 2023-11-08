@@ -1,4 +1,4 @@
-![ghbackground](https://github.com/zoneel/FogTalk/assets/40122657/10139dd0-b39a-495b-9bb7-badbec4e3b36)
+![ghbackground](https://github.com/zoneel/FogTalk/assets/40122657/b2762216-2484-4e3f-86df-28bb230e8c38)
 ![HitCount](https://hits.dwyl.com/zoneel/FogTalk.svg?style=flat-square)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 

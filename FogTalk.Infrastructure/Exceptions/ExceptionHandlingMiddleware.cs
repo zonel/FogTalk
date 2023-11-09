@@ -1,11 +1,18 @@
 ﻿using System.Security.Authentication;
 using FogTalk.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace FogTalk.Infrastructure.Exceptions;
 
 public class ExceptionHandlingMiddleware : IMiddleware
 {
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
+    public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
+    {
+        _logger = logger;
+    }
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try

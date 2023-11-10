@@ -12,4 +12,5 @@ public interface IUserRepository
     Task AddAsync(User user);
     Task UpdateAsync(User user);
     public Task<bool> UserExistsAsync(Expression<Func<User, bool>> predicate);
+    public Task<bool> UserHasAccessToChatAsync(int userId, int chatId);
 }

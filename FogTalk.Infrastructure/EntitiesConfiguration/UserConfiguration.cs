@@ -21,11 +21,11 @@ public class UsersConfiguration : IEntityTypeConfiguration<User>
             .WithOne(m => m.Sender)
             .HasForeignKey(m => m.SenderId);
 
-        //ReceivedMessages
-        builder
-            .HasMany(u => u.ReceivedMessages)
-            .WithOne(m => m.Receiver)
-            .HasForeignKey(m => m.ReceiverId);
+        // //ReceivedMessages
+        // builder
+        //     .HasMany(u => u.ReceivedMessages)
+        //     .WithOne(m => m.Receiver)
+        //     .HasForeignKey(m => m.ReceiverId);
 
         //Chats
         builder

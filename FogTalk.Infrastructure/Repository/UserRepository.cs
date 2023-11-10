@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Runtime.InteropServices.JavaScript;
 using FogTalk.Domain.Entities;
 using FogTalk.Domain.Repositories;
 using FogTalk.Domain.ValueObjects;
@@ -29,6 +30,12 @@ public class UserRepository : IUserRepository
         var userExists = await _dbContext.Users
             .AnyAsync(predicate);
         return userExists;
+    }
+
+    public Task<bool> UserHasAccessToChatAsync(int userId, int chatId)
+    {
+        return _dbContext.Chats
+            .AnyAsync(cu => cu.Id == chatId && cu.Participants.Any(u => u.Id == userId));
     }
 
     public async Task<User> GetByEmailAsync(string email)

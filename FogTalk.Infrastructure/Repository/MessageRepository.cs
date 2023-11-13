@@ -2,6 +2,7 @@
 using FogTalk.Domain.Repositories;
 using FogTalk.Infrastructure.Persistence;
 using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FogTalk.Infrastructure.Repository;
@@ -12,7 +13,6 @@ public class MessageRepository : IMessageRepository
     {
         _DbContext = context;
     }
-
     public FogTalkDbContext _DbContext { get; set; }
 
     public async Task<List<ShowMessageDto>> GetMessagesAsync<ShowMessageDto>(int chatId, string cursor, int limit, CancellationToken cancellationToken)
@@ -34,5 +34,16 @@ public class MessageRepository : IMessageRepository
         query = query.Take(limit);
         var listQuery = query.ProjectToType<ShowMessageDto>();
         return await listQuery.ToListAsync();
+    }
+
+    public async Task RemoveMessagesAsync(int messageId, CancellationToken cancellationToken)
+    {
+        var messagesToRemove = await _DbContext.Messages
+            .Where(m => m.Id == messageId)
+            .ToListAsync(cancellationToken);
+
+        _DbContext.Messages.RemoveRange(messagesToRemove);
+
+        await _DbContext.SaveChangesAsync(cancellationToken);
     }
 }

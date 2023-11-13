@@ -1,4 +1,5 @@
 ﻿using FogTalk.Application.Message.Commands.Create;
+using FogTalk.Application.Message.Commands.Delete;
 using FogTalk.Application.Message.Dto;
 using FogTalk.Application.Message.Queries.GetMessagesInChat;
 using FogTalk.Domain.Entities;
@@ -34,6 +35,14 @@ public class MessageController : ControllerBase
     {
         var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
         await _mediator.Send(new CreateMessageCommand(messageDto, chatId, Convert.ToInt32(id)));
+        return Ok();
+    }
+
+    [HttpDelete("{chatId}/{messageId}")]
+    public async Task<IActionResult> Delete([FromRoute] int chatId,[FromRoute] int messageId)
+    {
+        var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        await _mediator.Send(new DeleteMessageCommand(messageId, Convert.ToInt32(userId)));
         return Ok();
     }
 

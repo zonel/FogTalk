@@ -37,6 +37,12 @@ public class UserRepository : IUserRepository
         return _dbContext.Chats
             .AnyAsync(cu => cu.Id == chatId && cu.Participants.Any(u => u.Id == userId));
     }
+    
+    public Task<bool> UserHasAccessToMessageAsync(int userId, int messageId)
+    {
+        return _dbContext.Messages
+            .AnyAsync(m => m.Id == messageId && m.SenderId == userId);
+    }
 
     public async Task<User> GetByEmailAsync(string email)
     {

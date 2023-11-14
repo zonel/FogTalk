@@ -1,4 +1,5 @@
 ﻿using FogTalk.Application.Friend.Commands.Create;
+using FogTalk.Application.Friend.Commands.Delete;
 using FogTalk.Application.Friend.Dto;
 using FogTalk.Application.Friend.Queries.Get;
 using MediatR;
@@ -41,6 +42,14 @@ public class FriendController : ControllerBase
     {
         var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
         await _mediator.Send(new SendFriendRequestCommand(Convert.ToInt32(currentUserId), receivingUserId));
+        return Ok();
+    }
+    
+    [HttpDelete]
+    public async Task<IActionResult> RemoveFriend([FromBody] int userToRemoveId)
+    {
+        var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        await _mediator.Send(new RemoveFriendCommand(Convert.ToInt32(currentUserId), userToRemoveId));
         return Ok();
     }
 

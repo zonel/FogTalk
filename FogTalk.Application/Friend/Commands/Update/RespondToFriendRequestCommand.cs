@@ -1,6 +1,5 @@
-﻿namespace FogTalk.Application.Friend.Commands.Update;
+﻿using FogTalk.Application.Abstraction.Messaging;
 
-public class RespondToFriendRequestCommand
-{
-    
-}
+namespace FogTalk.Application.Friend.Commands.Update;
+
+public record RespondToFriendRequestCommand(int RequestedUserId, int RequestingUserId, bool Accepted) : ICommand;

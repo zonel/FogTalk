@@ -6,7 +6,7 @@ namespace FogTalk.Domain.Repositories;
 
 public interface IUserRepository
 {
-    Task<User> GetByIdAsync(int id);
+    public Task<User> GetByIdAsync(int id, Func<IQueryable<User>, IQueryable<User>> include = null);   
     Task<User> GetByEmailAsync(string email);
     Task<User> GetByUsernameAsync(string username);
     Task AddAsync(User user);

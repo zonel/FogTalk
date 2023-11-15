@@ -18,10 +18,16 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public async Task<User> GetByIdAsync(int id)
+    public async Task<User> GetByIdAsync(int id, Func<IQueryable<User>, IQueryable<User>> include = null)
     {
-        var user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Id == id);
+        IQueryable<User> query = _dbContext.Users;
+
+        if (include != null)
+        {
+            query = include(query);
+        }
+
+        var user = await query.FirstOrDefaultAsync(u => u.Id == id);
         return user;
     }
     

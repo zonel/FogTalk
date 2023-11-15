@@ -1,6 +1,7 @@
 ﻿using FogTalk.Domain.Repositories;
 using FogTalk.Infrastructure.Persistence;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
 namespace FogTalk.Infrastructure.Repository;
@@ -17,36 +18,50 @@ public class FriendRepository : IFriendRepository
     }
     public async Task<IEnumerable<T>> GetUsersFriends<T>(int userId)
     {
-        return _dbContext.Users
+        var friends = _dbContext.Users
             .Where(u => u.Id == userId)
             .SelectMany(u => u.Friends)
-            .ToList().Adapt<IEnumerable<T>>();
+            .ToList();
+
+        if (friends.Count == 0)
+        {
+            return new List<T>();
+        }
+        
+        return friends.Adapt<IEnumerable<T>>();
     }
     public IEnumerable<T> GetUsersFriendRequests<T>(int userId)
     {
-        return _dbContext.Users
+        var friendRequests = _dbContext.Users
             .Where(u => u.Id == userId)
             .SelectMany(u => u.FriendRequests)
-            .ToList().Adapt<IEnumerable<T>>();
+            .ToList();
+        
+        if (friendRequests.Count() == 0)
+        {
+            return new List<T>();
+        }
+        
+        return friendRequests.Adapt<IEnumerable<T>>();
     }
 
     public async Task SendFriendRequestAsync(int userId, int friendId)
     {
-        var receivingUser = await _dbContext.Users.FindAsync(friendId);
+        var user = await _dbContext.Users.Include(c => c.FriendRequests).FirstOrDefaultAsync(c => c.Id == userId);
+        var friend = await _dbContext.Users.FirstOrDefaultAsync(c => c.Id == friendId);
         
-        _dbContext.Users
-            .Where(u => u.Id == userId)
-            .SelectMany(u => u.FriendRequests)
-            .ToList()
-            .Add(receivingUser);
+        if (user == null || friend == null)
+            throw new InvalidOperationException("User not found");
         
+        user.FriendRequests.Add(friend);
         await _dbContext.SaveChangesAsync();
     }
 
     public async Task HandleFriendRequestAsync(int requestedUserId, int requestingUserId, bool isAccepted)
     {
-        var requestedUser = await _userRepository.GetByIdAsync(requestedUserId);
-        var requestingUser = await _userRepository.GetByIdAsync(requestingUserId);
+        var requestedUser = await _userRepository.GetByIdAsync(requestedUserId, u => u.Include(u => u.Friends));
+        var requestedUserWithFriendRequests = await _userRepository.GetByIdAsync(requestedUserId, u => u.Include(u => u.FriendRequests));
+        var requestingUser = await _userRepository.GetByIdAsync(requestingUserId, u => u.Include(u => u.Friends));
 
         if (requestingUser == null || requestedUser == null)
             throw new InvalidOperationException("User not found");
@@ -58,6 +73,9 @@ public class FriendRepository : IFriendRepository
 
             await _userRepository.UpdateAsync(requestedUser);
             await _userRepository.UpdateAsync(requestingUser);
+            
+            //remove friend request
+            requestedUserWithFriendRequests.FriendRequests.Remove(requestingUser);
             
             await _dbContext.SaveChangesAsync();
         }

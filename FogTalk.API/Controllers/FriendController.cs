@@ -1,7 +1,9 @@
 ﻿using FogTalk.Application.Friend.Commands.Create;
 using FogTalk.Application.Friend.Commands.Delete;
+using FogTalk.Application.Friend.Commands.Update;
 using FogTalk.Application.Friend.Dto;
 using FogTalk.Application.Friend.Queries.Get;
+using FogTalk.Application.Friend.Queries.GetFriendRequests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,14 +28,14 @@ public class FriendController : ControllerBase
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
         var friends = await _mediator.Send(new GetUserFriendsQuery(Convert.ToInt32(userId)));
-        return friends;
+        return friends ?? new List<ShowFriendDto>();
     }
     
     [HttpGet("requests")]
-    public async Task<IEnumerable<ShowFriendDto>> GetFriendRequests()
+    public async Task<IEnumerable<ShowFriendRequestDto>> GetFriendRequests()
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        var friends = await _mediator.Send(new GetUserFriendsQuery(Convert.ToInt32(userId)));
+        var friends = await _mediator.Send(new GetUserFriendRequestsQuery(Convert.ToInt32(userId)));
         return friends;
     }
         
@@ -42,6 +44,14 @@ public class FriendController : ControllerBase
     {
         var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
         await _mediator.Send(new SendFriendRequestCommand(Convert.ToInt32(currentUserId), receivingUserId));
+        return Ok();
+    }
+    
+    [HttpPut("{requestingUserId}")]
+    public async Task<IActionResult> RespondToFriendRequest([FromRoute] int requestingUserId, [FromBody] bool Accepted)
+    {
+        var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        await _mediator.Send(new RespondToFriendRequestCommand(Convert.ToInt32(currentUserId), requestingUserId, Accepted));
         return Ok();
     }
     

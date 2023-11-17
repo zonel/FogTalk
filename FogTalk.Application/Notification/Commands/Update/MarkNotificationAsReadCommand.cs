@@ -1,6 +1,5 @@
-﻿namespace FogTalk.Application.Notification.Commands.Update;
+﻿using FogTalk.Application.Abstraction.Messaging;
 
-public class MarkNotificationAsReadCommand
-{
-    
-}
+namespace FogTalk.Application.Notification.Commands.Update;
+
+public record MarkNotificationAsReadCommand(int userId, int notificationId) : ICommand;

@@ -1,6 +1,5 @@
-﻿namespace FogTalk.Application.Notification.Commands.Delete;
+﻿using FogTalk.Application.Abstraction.Messaging;
 
-public class DeleteNotificationCommand
-{
-    
-}
+namespace FogTalk.Application.Notification.Commands.Delete;
+
+public record DeleteNotificationCommand(int userId, int notificationId) : ICommand;

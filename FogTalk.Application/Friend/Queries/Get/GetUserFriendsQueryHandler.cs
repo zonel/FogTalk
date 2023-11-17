@@ -1,5 +1,6 @@
 ﻿using FogTalk.Application.Abstraction.Messaging;
 using FogTalk.Application.Friend.Dto;
+using FogTalk.Application.User.Dto;
 using FogTalk.Domain.Repositories;
 
 namespace FogTalk.Application.Friend.Queries.Get;

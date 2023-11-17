@@ -4,6 +4,7 @@ using FogTalk.Application.Friend.Commands.Update;
 using FogTalk.Application.Friend.Dto;
 using FogTalk.Application.Friend.Queries.Get;
 using FogTalk.Application.Friend.Queries.GetFriendRequests;
+using FogTalk.Application.User.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

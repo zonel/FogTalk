@@ -1,4 +1,5 @@
-﻿using FogTalk.Domain.Repositories;
+﻿using FogTalk.Application.Friend.Dto;
+using FogTalk.Domain.Repositories;
 using FogTalk.Infrastructure.Persistence;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,8 @@ public class FriendRepository : IFriendRepository
             return new List<T>();
         }
         
-        return friends.Adapt<IEnumerable<T>>();
+        var showUserDtos = friends.Adapt<List<T>>();
+        return showUserDtos;
     }
     public IEnumerable<T> GetUsersFriendRequests<T>(int userId)
     {

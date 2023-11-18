@@ -5,10 +5,6 @@ namespace FogTalk.Infrastructure.Persistence;
 
 public class FogTalkDbContext : DbContext
 {
-    public FogTalkDbContext()
-    {
-    }
-    
     public FogTalkDbContext(DbContextOptions options) : base(options)
     {
     }
@@ -16,12 +12,9 @@ public class FogTalkDbContext : DbContext
     public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<User> Users { get; set; }
-    
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Jti> Jtis { get; set; }
-    
-    
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);

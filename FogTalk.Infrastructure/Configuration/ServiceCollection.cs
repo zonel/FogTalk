@@ -66,6 +66,7 @@ public static class ServiceCollection
         services.AddScoped<IMessageRepository, MessageRepository>(); // Register the MessageRepository
         services.AddScoped<IFriendRepository, FriendRepository>(); // Register the FriendRepository
         services.AddScoped<INotificationRepository, NotificationRepository>(); // Register the NotificationRepository
+        services.AddScoped<IUserSearchRepository, UserSearchRepository>(); // Register the UserSearchRepository
         
         
         services.AddScoped<IAuthorizationHandler, JtiAuthorizationHandler>(); // Register the JtiAuthorizationHandler

@@ -8,7 +8,6 @@ public class Message
     public string Content { get; set; }
     public DateTime Timestamp { get; set; }
     public MessageStatus MessageStatus { get; set; }
-
     public int SenderId { get; set; }
     public int ChatId { get; set; }
 

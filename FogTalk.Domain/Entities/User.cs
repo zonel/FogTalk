@@ -13,7 +13,6 @@ public class User
     public virtual ICollection<Message> SentMessages { get; set; } 
     public virtual ICollection<Chat> Chats { get; set; } 
     public virtual ICollection<User> Friends { get; set; } 
-    public virtual ICollection<User> FriendRequests { get; set; } 
-    
-    public virtual ICollection<Notification> Notifications { get; set; }
+    public virtual ICollection<User> FriendRequests { get; set; }
+    public virtual ICollection<Notification> ReceivedNotifications { get; set; }
 }

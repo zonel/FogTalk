@@ -20,12 +20,12 @@ public class UsersConfiguration : IEntityTypeConfiguration<User>
             .HasMany(u => u.SentMessages)
             .WithOne(m => m.Sender)
             .HasForeignKey(m => m.SenderId);
-
-        // //ReceivedMessages
+        
+        // Notifications
         // builder
-        //     .HasMany(u => u.ReceivedMessages)
-        //     .WithOne(m => m.Receiver)
-        //     .HasForeignKey(m => m.ReceiverId);
+        //     .HasMany(u => u.ReceivedNotifications)
+        //     .WithOne(n => n.User)
+        //     .HasForeignKey(n => n.UserId);
 
         //Chats
         builder
@@ -63,7 +63,5 @@ public class UsersConfiguration : IEntityTypeConfiguration<User>
                     .WithMany()
                     .HasForeignKey("RequestingUserId")
             );
-
-
     }
 }

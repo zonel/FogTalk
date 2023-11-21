@@ -21,6 +21,13 @@ public class MessageController : ControllerBase
         _mediator = mediator;
     }
     
+    /// <summary>
+    /// Gets messages in a chat. Cursor is used to get messages from a certain point in time for easy pagination.
+    /// </summary>
+    /// <param name="chatId">Id of a chat to get messages from.</param>
+    /// <param name="cursor">An indicator utilized based on the timestamp of a message to determine the starting point for retrieving messages.</param>
+    /// <param name="pageSize">How many messages to fetch per request.</param>
+    /// <returns></returns>
     [HttpGet("{chatId}")]
     public async Task<IEnumerable<ShowMessageDto>> Get([FromRoute] int chatId, [FromQuery] string cursor = "", [FromQuery] int pageSize = 10)
     {
@@ -29,7 +36,11 @@ public class MessageController : ControllerBase
         return messages;
     }
     
-    
+    /// <summary>
+    /// Create a message in a chat.
+    /// </summary>
+    /// <param name="chatId">Id of a chat to send message in.</param>
+    /// <param name="messageDto">Dto containing all essential informations to send message.</param>
     [HttpPost("{chatId}")]
     public async Task<IActionResult> Create([FromRoute] int chatId, [FromBody] MessageDto messageDto)
     {
@@ -38,6 +49,12 @@ public class MessageController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Deletes a message in a chat.
+    /// </summary>
+    /// <param name="chatId">Id of a chat to delete. </param>
+    /// <param name="messageId">Id of a message to delete.</param>
+    /// <returns></returns>
     [HttpDelete("{chatId}/{messageId}")]
     public async Task<IActionResult> Delete([FromRoute] int chatId,[FromRoute] int messageId)
     {

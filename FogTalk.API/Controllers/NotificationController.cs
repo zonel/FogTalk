@@ -22,6 +22,12 @@ public class NotificationController : ControllerBase
         _mediator = mediator;
     }
     
+    /// <summary>
+    /// Get all notifications for the current user
+    /// </summary>
+    /// <returns>
+    /// List of notifications
+    /// </returns>
     [HttpGet]
     public async Task<IEnumerable<NotificationDto>> Get()
     {
@@ -30,6 +36,10 @@ public class NotificationController : ControllerBase
         return notifications ?? new List<NotificationDto>();
     }
     
+    /// <summary>
+    /// Mark a notification as read
+    /// </summary>
+    /// <param name="notificationId">Id of a notification</param>
     [HttpPost("{notificationId}")]
     public async Task MarkAsRead([FromRoute] int notificationId)
     {

@@ -19,6 +19,10 @@ public class UserSearchController : ControllerBase
         _mediator = mediator;
     }
     
+    /// <summary>
+    /// Searches for users by his username.
+    /// </summary>
+    /// <param name="searchPhrase">Phrase that must be contained in user's username.</param>
     [HttpGet("user")]
     public async Task<IEnumerable<ShowUserDto>> SearchUsers([FromBody] string searchPhrase)
     {

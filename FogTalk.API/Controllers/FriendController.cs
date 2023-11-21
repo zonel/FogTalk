@@ -24,6 +24,12 @@ public class FriendController : ControllerBase
         _mediator = mediator;
     }
     
+    /// <summary>
+    /// Gets all friends of the user.
+    /// </summary>
+    /// <returns>
+    /// List of friends.
+    /// </returns>
     [HttpGet]
     public async Task<IEnumerable<ShowFriendDto>> Get()
     {
@@ -32,6 +38,12 @@ public class FriendController : ControllerBase
         return friends ?? new List<ShowFriendDto>();
     }
     
+    /// <summary>
+    /// Gets all friend requests of the user.
+    /// </summary>
+    /// <returns>
+    /// List of friend requests.
+    /// </returns>
     [HttpGet("requests")]
     public async Task<IEnumerable<ShowFriendRequestDto>> GetFriendRequests()
     {
@@ -40,6 +52,11 @@ public class FriendController : ControllerBase
         return friends;
     }
         
+    
+    /// <summary>
+    /// Sends a friend request to the user with the given id.
+    /// </summary>
+    /// <param name="receivingUserId"> Id of the user that will receive friend request.</param>
     [HttpGet("{receivingUserId}")]
     public async Task<IActionResult> SendFriendRequest([FromRoute] int receivingUserId)
     {
@@ -48,6 +65,11 @@ public class FriendController : ControllerBase
         return Ok();
     }
     
+    /// <summary>
+    /// Accept or decline friend request.
+    /// </summary>
+    /// <param name="requestingUserId"> Id of the user that sent a friend request.</param>
+    /// <param name="Accepted">accepted/declined</param>
     [HttpPut("{requestingUserId}")]
     public async Task<IActionResult> RespondToFriendRequest([FromRoute] int requestingUserId, [FromBody] bool Accepted)
     {
@@ -56,6 +78,10 @@ public class FriendController : ControllerBase
         return Ok();
     }
     
+    /// <summary>
+    /// Deletes a friend.
+    /// </summary>
+    /// <param name="userToRemoveId"> Id of the user to remove.</param>
     [HttpDelete]
     public async Task<IActionResult> RemoveFriend([FromBody] int userToRemoveId)
     {

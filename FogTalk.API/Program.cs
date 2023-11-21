@@ -1,3 +1,4 @@
+using System.Reflection;
 using FogTalk.API.Configuration;
 using FogTalk.Application.Abstraction;
 using FogTalk.Application.Configuration;
@@ -11,9 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 //loading environmental variables from .env file
 DotNetEnv.Env.Load();
 
+var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
 // Add services to the container.
 builder.Services
-    .AddSwaggerGen()
+    .AddSwaggerGen(s => s.IncludeXmlComments(xmlPath))
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
     .AddPresentation()

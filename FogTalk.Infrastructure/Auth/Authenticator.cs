@@ -61,7 +61,7 @@ public class Authenticator : IAuthenticator
         
         if (jwtBlacklistedAlready)
         {
-            throw new TokenAlreadyBlacklistedException();
+            throw new TokenAlreadyBlacklistedException("Token already blacklisted.");
         }
         else
         {

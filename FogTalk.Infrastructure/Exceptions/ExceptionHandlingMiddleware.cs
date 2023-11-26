@@ -21,16 +21,14 @@ public class ExceptionHandlingMiddleware : IMiddleware
         }
         catch (Exception e)
         {
-            context.Response.StatusCode = 400; // Set the appropriate status code
-
             string errorMessage = e switch
             {
-                InvalidCredentialsException invalidCredentials => $"[400] {invalidCredentials.GetType().Name} - {invalidCredentials.Message}",
-                TokenAlreadyBlacklistedException tokenAlreadyBlacklisted => $"[400] {tokenAlreadyBlacklisted.GetType().Name} - {tokenAlreadyBlacklisted.Message}",
-                UsernameTakenException usernameTaken => $"[400] {usernameTaken.GetType().Name}",
-                EmailTakenException emailTaken => $"[400] {emailTaken.GetType().Name}",
-                BadHttpRequestException badHttpRequest => $"Exception occurred - {badHttpRequest.Message}",
-                IdempotencyException idempotencyException => $"[400] {idempotencyException.GetType().Name} - {idempotencyException.Message}",
+                InvalidCredentialsException invalidCredentials => $"[{invalidCredentials.statusCode}] {invalidCredentials.GetType().Name} - {invalidCredentials.Message}",
+                TokenAlreadyBlacklistedException tokenAlreadyBlacklisted => $"[{tokenAlreadyBlacklisted.statusCode}] {tokenAlreadyBlacklisted.GetType().Name} - {tokenAlreadyBlacklisted.Message}",
+                UsernameTakenException usernameTaken => $"[{usernameTaken.statusCode}] {usernameTaken.GetType().Name} - {usernameTaken.Message}",
+                EmailTakenException emailTaken => $"[{emailTaken.statusCode}] {emailTaken.GetType().Name} - {emailTaken.Message}",
+                BadHttpRequestException badHttpRequest => $"[{badHttpRequest.StatusCode}] {badHttpRequest.GetType().Name} - {badHttpRequest.Message}",
+                IdempotencyException idempotencyException => $"[{idempotencyException.statusCode}] {idempotencyException.GetType().Name} - {idempotencyException.Message}",
                 _ => "[Middleware] An unexpected error occurred."
             };
 

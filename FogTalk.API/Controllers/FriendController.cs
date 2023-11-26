@@ -5,23 +5,26 @@ using FogTalk.Application.Friend.Dto;
 using FogTalk.Application.Friend.Queries.Get;
 using FogTalk.Application.Friend.Queries.GetFriendRequests;
 using FogTalk.Application.User.Dto;
+using FogTalk.Infrastructure.SignalR;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace FogTalk.API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "JtiPolicy")]
+[Microsoft.AspNetCore.Authorization.Authorize(Policy = "JtiPolicy")]
 [Route("api/[controller]")]
 public class FriendController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IHubContext<UserHub> _userHubContext;
 
-    public FriendController(IMediator mediator)
+    public FriendController(IMediator mediator, IHubContext<UserHub> userHubContext)
     {
         _mediator = mediator;
+        _userHubContext = userHubContext;
     }
     
     /// <summary>
@@ -62,6 +65,7 @@ public class FriendController : ControllerBase
     {
         var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
         await _mediator.Send(new SendFriendRequestCommand(Convert.ToInt32(currentUserId), receivingUserId));
+        await _userHubContext.Clients.User(receivingUserId.ToString()).SendFriendRequestNotification(receivingUserId);
         return Ok();
     }
     

@@ -20,8 +20,13 @@ public static class ServiceCollection
         });
         #endregion
         
+        #region MediatR
         services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()); });
+        #endregion
+        
+        #region Middlewares
         services.AddScoped<ExceptionHandlingMiddleware>();
+        #endregion
         return services;
     }
 }

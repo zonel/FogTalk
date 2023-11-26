@@ -61,13 +61,15 @@ public static class ServiceCollection
         services.AddScoped<IUserRepository, UserRepository>(); // Register the UserRepository
         services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<IDatabaseSeeder, DatabaseSeeder>(); // Register the DatabaseSeeder
+        
+        #region Repositories
         services.AddScoped<IJtiRepository, JtiRepository>(); // Register the JtiRepository
         services.AddScoped<IChatRepository, ChatRepository>(); // Register the ChatRepository
         services.AddScoped<IMessageRepository, MessageRepository>(); // Register the MessageRepository
         services.AddScoped<IFriendRepository, FriendRepository>(); // Register the FriendRepository
         services.AddScoped<INotificationRepository, NotificationRepository>(); // Register the NotificationRepository
         services.AddScoped<IUserSearchRepository, UserSearchRepository>(); // Register the UserSearchRepository
-        
+        #endregion
         
         services.AddScoped<IAuthorizationHandler, JtiAuthorizationHandler>(); // Register the JtiAuthorizationHandler
         services.AddAuthorization(options =>
@@ -77,6 +79,8 @@ public static class ServiceCollection
                 policy.Requirements.Add(new JtiRequirement());
             });
         });
+
+        services.AddSignalR();
         
         return services;
     }

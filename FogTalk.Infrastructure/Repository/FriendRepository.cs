@@ -1,4 +1,5 @@
 ﻿using FogTalk.Application.Friend.Dto;
+using FogTalk.Domain.Exceptions;
 using FogTalk.Domain.Repositories;
 using FogTalk.Infrastructure.Persistence;
 using Mapster;
@@ -17,12 +18,12 @@ public class FriendRepository : IFriendRepository
         _dbContext = dbContext;
         _userRepository = userRepository;
     }
-    public async Task<IEnumerable<T>> GetUsersFriends<T>(int userId)
+    public async Task<IEnumerable<T>> GetUserFriendsAsync<T>(int userId)
     {
-        var friends = _dbContext.Users
+        var friends = await _dbContext.Users
             .Where(u => u.Id == userId)
             .SelectMany(u => u.Friends)
-            .ToList();
+            .ToListAsync();
 
         if (friends.Count == 0)
         {
@@ -32,12 +33,12 @@ public class FriendRepository : IFriendRepository
         var showUserDtos = friends.Adapt<List<T>>();
         return showUserDtos;
     }
-    public IEnumerable<T> GetUsersFriendRequests<T>(int userId)
+    public async Task<IEnumerable<T>> GetUsersFriendRequestsAsync<T>(int userId)
     {
-        var friendRequests = _dbContext.Users
+        var friendRequests = await _dbContext.Users
             .Where(u => u.Id == userId)
             .SelectMany(u => u.FriendRequests)
-            .ToList();
+            .ToListAsync();
         
         if (friendRequests.Count() == 0)
         {
@@ -90,14 +91,22 @@ public class FriendRepository : IFriendRepository
 
 }
 
-    public Task RemoveFriendAsync(int userId, int userToDeleteId)
+    public async Task RemoveFriendAsync(int userId, int userToDeleteId)
     {
-        var user = _dbContext.Users.Find(userId);
-        var userToDelete = _dbContext.Users.Find(userToDeleteId);
+        var user = await _dbContext.Users.FindAsync(userId);
+        var userToDelete = await _dbContext.Users.FindAsync(userToDeleteId);
         
-        user.Friends.Remove(userToDelete);
-        userToDelete.Friends.Remove(user);
+        //idempotency check
+        if(user.Friends.Any(f => f.Id == userToDeleteId) == false)
+            throw new IdempotencyException("This user is not your friend.");
         
-        return _dbContext.SaveChangesAsync();
+        if (user != null && userToDelete != null)
+        {
+            user.Friends.Remove(userToDelete);
+            userToDelete.Friends.Remove(user);
+
+            await _dbContext.SaveChangesAsync();
+            return;
+        }
     }
 }

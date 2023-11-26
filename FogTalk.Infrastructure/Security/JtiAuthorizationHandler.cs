@@ -21,8 +21,9 @@ public class JtiAuthorizationHandler : AuthorizationHandler<JtiRequirement>
         {
             var token = authHeader.ToString().Replace("Bearer ", string.Empty);
             var jti = _jtiRepository.ExtractJtiFromToken(token);
+            var jwtBlacklistedAlready = await _jtiRepository.IsJtiBlacklistedAsync(jti);
             
-            if (!string.IsNullOrEmpty(jti) && !_jtiRepository.IsJtiBlacklisted(jti))
+            if (!string.IsNullOrEmpty(jti) && !jwtBlacklistedAlready)
             {
                 context.Succeed(requirement);
             }

@@ -52,14 +52,16 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetByEmailAsync(string email)
     {
-        return await _dbContext.Users
+        var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Email == email);
+        return user ?? new User();
     }
 
     public async Task<User> GetByUsernameAsync(string username)
     {
-        return await _dbContext.Users
+        var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.UserName == username);
+        return user ?? new User();
     }
 
     public async Task AddAsync(User user)

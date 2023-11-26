@@ -27,9 +27,9 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
     public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         if (await _userRepository.UserExistsAsync(u => u.UserName == request.UserDto.UserName))
-            throw new UsernameTakenException();
+            throw new UsernameTakenException("Username is already taken");
         if (await _userRepository.UserExistsAsync(u => u.Email == request.UserDto.Email))
-            throw new EmailTakenException();
+            throw new EmailTakenException("Email is already taken");
         
         
         Domain.Entities.User user = request.UserDto.Adapt<Domain.Entities.User>();

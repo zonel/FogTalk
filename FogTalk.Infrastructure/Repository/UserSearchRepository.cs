@@ -1,6 +1,7 @@
 ﻿using FogTalk.Domain.Repositories;
 using FogTalk.Infrastructure.Persistence;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace FogTalk.Infrastructure.Repository;
 
@@ -15,7 +16,7 @@ public class UserSearchRepository : IUserSearchRepository
     
     public async Task<IEnumerable<T>> SearchAsync<T>(string searchPhrase)
     {
-        var users = _dbContext.Users.Where(u => u.UserName.Contains(searchPhrase)).ToList();
+        var users = await _dbContext.Users.Where(u => u.UserName.Contains(searchPhrase)).ToListAsync();
         
         if (users.Count == 0)
         {

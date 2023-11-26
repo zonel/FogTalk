@@ -20,15 +20,21 @@ public class ChatRepository : IChatRepository
 
     public async Task<Chat> GetChatForUserByIdAsync(int chatId, int userId)
     {
-        return await _dbContext.Chats
+        var chat = await _dbContext.Chats
             .Include(chat => chat.Participants)
             .FirstOrDefaultAsync(chat => chat.Id == chatId && chat.Participants.Any(user => user.Id == userId));
+
+        return chat ?? new Chat();
     }
     
     public async Task AddUserToChatAsync(int userId, int chatId)
     {
         var chat = await _dbContext.Chats.Include(c => c.Participants).FirstOrDefaultAsync(c => c.Id == chatId);
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        
+        if(chat == null || user == null)
+            throw new InvalidOperationException("User or chat not found");
+        
         chat.Participants.Add(user);
         await _dbContext.SaveChangesAsync();
     }
@@ -37,6 +43,10 @@ public class ChatRepository : IChatRepository
     {
         var chat = await _dbContext.Chats.Include(c => c.Participants).FirstOrDefaultAsync(c => c.Id == chatId);
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        
+        if(chat == null || user == null)
+            throw new InvalidOperationException("User or chat not found");
+        
         chat.Participants.Remove(user);
         await _dbContext.SaveChangesAsync();
     }
@@ -50,6 +60,10 @@ public class ChatRepository : IChatRepository
     public async Task DeleteByIdAsync(int id)
     {
         var chatToRemove =  _dbContext.Chats.FirstOrDefault(c => c.Id == id);
+        
+        if(chatToRemove == null)
+            throw new InvalidOperationException("Chat not found");
+        
          _dbContext.Chats.Remove(chatToRemove);
          await _dbContext.SaveChangesAsync();
     }

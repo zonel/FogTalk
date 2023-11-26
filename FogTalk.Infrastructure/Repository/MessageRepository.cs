@@ -11,19 +11,19 @@ public class MessageRepository : IMessageRepository
 {
     public MessageRepository(FogTalkDbContext context)
     {
-        _DbContext = context;
+        _dbContext = context;
     }
-    public FogTalkDbContext _DbContext { get; set; }
+    private readonly FogTalkDbContext _dbContext;
 
     public async Task<List<ShowMessageDto>> GetMessagesAsync<ShowMessageDto>(int chatId, string cursor, int limit, CancellationToken cancellationToken)
     {
-        IQueryable<Message> query = _DbContext.Messages
+        IQueryable<Message> query = _dbContext.Messages
             .Where(m => m.ChatId == chatId)
             .OrderByDescending(m => m.Timestamp); // Order by timestamp descending
 
         if (!string.IsNullOrEmpty(cursor))
         {
-            var cursorMessage = await _DbContext.Messages.FindAsync(Convert.ToInt32(cursor));
+            var cursorMessage = await _dbContext.Messages.FindAsync(Convert.ToInt32(cursor));
 
             if (cursorMessage != null)
             {
@@ -33,17 +33,17 @@ public class MessageRepository : IMessageRepository
 
         query = query.Take(limit);
         var listQuery = query.ProjectToType<ShowMessageDto>();
-        return await listQuery.ToListAsync();
+        return await listQuery.ToListAsync(cancellationToken);
     }
 
     public async Task RemoveMessagesAsync(int messageId, CancellationToken cancellationToken)
     {
-        var messagesToRemove = await _DbContext.Messages
+        var messagesToRemove = await _dbContext.Messages
             .Where(m => m.Id == messageId)
             .ToListAsync(cancellationToken);
 
-        _DbContext.Messages.RemoveRange(messagesToRemove);
+        _dbContext.Messages.RemoveRange(messagesToRemove);
 
-        await _DbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

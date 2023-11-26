@@ -54,10 +54,10 @@ public class Authenticator : IAuthenticator
     }
 
     //TODO: change to async
-    public void InvalidateTokenAsync(JwtDto token)
+    public async void InvalidateTokenAsync(JwtDto token)
     {
         var jti = _jtiRepository.ExtractJtiFromToken(token.AccessToken);
-        var jwtBlacklistedAlready = _jtiRepository.IsJtiBlacklisted(jti);
+        var jwtBlacklistedAlready = await _jtiRepository.IsJtiBlacklistedAsync(jti);
         
         if (jwtBlacklistedAlready)
         {

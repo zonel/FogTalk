@@ -1,6 +1,7 @@
 ﻿using FogTalk.Domain.Repositories;
 using FogTalk.Infrastructure.Persistence;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace FogTalk.Infrastructure.Repository;
 
@@ -14,9 +15,9 @@ public class NotificationRepository : INotificationRepository
     }
     public async Task<IEnumerable<T>> GetNotificationsAsync<T>(int userId)
     {
-        var friends = _dbContext.Notifications
+        var friends = await _dbContext.Notifications
             .Where(u => u.Id == userId)
-            .ToList();
+            .ToListAsync();
 
         if (friends.Count == 0)
         {
@@ -29,8 +30,8 @@ public class NotificationRepository : INotificationRepository
 
     public async Task MarkNotificationAsReadAsync(int userId, int notificationId)
     {
-        var notification = _dbContext.Notifications
-            .FirstOrDefault(u => u.Id == userId && u.Id == notificationId);
+        var notification = await _dbContext.Notifications
+            .FirstOrDefaultAsync(u => u.Id == userId && u.Id == notificationId);
 
         if (notification == null)
         {
@@ -42,16 +43,16 @@ public class NotificationRepository : INotificationRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public Task DeleteNotificationAsync(int userId, int notificationId)
+    public async Task DeleteNotificationAsync(int userId, int notificationId)
     {
-        var notification = _dbContext.Notifications.FirstOrDefault(u => u.Id == notificationId);
+        var notification = await _dbContext.Notifications.FirstOrDefaultAsync(u => u.Id == notificationId);
         
         if (notification == null)
         {
-            return Task.CompletedTask;
+            return;
         }
         
         _dbContext.Notifications.Remove(notification);
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 }

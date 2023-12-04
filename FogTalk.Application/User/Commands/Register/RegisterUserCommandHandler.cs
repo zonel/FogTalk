@@ -1,9 +1,7 @@
 ﻿using FogTalk.Application.Abstraction.Messaging;
-using FogTalk.Application.Chat.Commands.Create;
 using FogTalk.Application.Security;
 using FogTalk.Domain.Exceptions;
 using FogTalk.Domain.Repositories;
-using FogTalk.Domain.Shared;
 using Mapster;
 
 namespace FogTalk.Application.User.Commands.Register;

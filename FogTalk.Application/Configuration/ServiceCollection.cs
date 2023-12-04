@@ -9,7 +9,6 @@ using FogTalk.Application.User.Commands.Register;
 using FogTalk.Application.User.Commands.Update;
 using FogTalk.Application.User.Dto;
 using FogTalk.Application.User.Queries.Get;
-using FogTalk.Domain.Shared;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 

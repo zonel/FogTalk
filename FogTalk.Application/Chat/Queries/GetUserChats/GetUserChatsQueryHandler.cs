@@ -1,7 +1,6 @@
 ﻿using FogTalk.Application.Abstraction.Messaging;
 using FogTalk.Application.Chat.Dto;
 using FogTalk.Domain.Repositories;
-using FogTalk.Domain.Shared;
 using Mapster;
 
 namespace FogTalk.Application.Chat.Queries;

@@ -6,7 +6,6 @@ using FogTalk.Application.Chat.Commands.Update;
 using FogTalk.Application.Chat.Dto;
 using FogTalk.Application.Chat.Queries;
 using FogTalk.Application.Chat.Queries.GetById;
-using FogTalk.Application.User.Commands.Register;
 using FogTalk.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +24,10 @@ public class ChatController : ControllerBase
 {
     private readonly IMediator _mediator;
     
+    /// <summary>
+    /// Chat Controller constructor.
+    /// </summary>
+    /// <param name="mediator"></param>
     public ChatController(IMediator mediator)
     {
         _mediator = mediator;
@@ -64,20 +67,9 @@ public class ChatController : ControllerBase
     [HttpPost("leave")]
     public async Task<IActionResult> Leave([FromBody] int chatId)
     {
-        try
-        {
             var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
             await _mediator.Send(new LeaveChatCommand(Convert.ToInt32(id), chatId));
             return Ok();
-        }
-        catch (IdempotencyException e)
-        {
-            return Conflict(e.Message);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
     }
     
     /// <summary>
@@ -109,10 +101,11 @@ public class ChatController : ControllerBase
     /// </summary>
     /// <param name="UpdateChatDto">Dto with ale the parameters to update.</param>
     [HttpPut]
-    public async Task UpdateChat([FromBody] UpdateChatDto UpdateChatDto)
+    public async Task<IActionResult> UpdateChat([FromBody] UpdateChatDto UpdateChatDto)
     {
         var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
         await _mediator.Send(new UpdateChatCommand(id ,UpdateChatDto));
+        return Ok();
     }
     
     /// <summary>
@@ -120,10 +113,11 @@ public class ChatController : ControllerBase
     /// </summary>
     /// <param name="chatId">Id of a chat to delete.</param>
     [HttpDelete]
-    public async Task DeleteChat([FromBody] int chatId)
+    public async Task<IActionResult> DeleteChat([FromBody] int chatId)
     {
         var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
         await _mediator.Send(new DeleteChatCommand(id, chatId));
+        return Ok();
     }
     
 }

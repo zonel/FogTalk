@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using FogTalk.Domain.Entities;
-using FogTalk.Domain.ValueObjects;
 
 namespace FogTalk.Domain.Repositories;
 

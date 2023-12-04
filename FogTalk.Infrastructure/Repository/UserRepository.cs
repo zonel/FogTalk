@@ -1,11 +1,8 @@
 ﻿using System.Linq.Expressions;
-using System.Runtime.InteropServices.JavaScript;
 using FogTalk.Domain.Entities;
 using FogTalk.Domain.Repositories;
-using FogTalk.Domain.ValueObjects;
 using FogTalk.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace FogTalk.Infrastructure.Repository;
 

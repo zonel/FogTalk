@@ -1,5 +1,4 @@
-﻿using FogTalk.Domain.Shared;
-using MediatR;
+﻿using MediatR;
 
 namespace FogTalk.Application.Abstraction.Messaging;
 

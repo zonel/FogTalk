@@ -29,10 +29,10 @@ public class MessageController : ControllerBase
     /// <param name="pageSize">How many messages to fetch per request.</param>
     /// <returns></returns>
     [HttpGet("{chatId}")]
-    public async Task<IEnumerable<ShowMessageDto>> Get([FromRoute] int chatId, [FromQuery] string cursor = "", [FromQuery] int pageSize = 10)
+    public async Task<IEnumerable<ShowMessageDto>> Get([FromRoute] int chatId, CancellationToken cancellationToken, [FromQuery] string cursor = "", [FromQuery] int pageSize = 10)
     {
         var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        var messages = await _mediator.Send(new GetMessagesInChatCommand(chatId, cursor, pageSize, CancellationToken.None));
+        var messages = await _mediator.Send(new GetMessagesInChatCommand(chatId, cursor, pageSize, cancellationToken));
         return messages;
     }
     

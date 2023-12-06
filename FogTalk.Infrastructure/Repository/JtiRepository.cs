@@ -16,9 +16,9 @@ public class JtiRepository : IJtiRepository
         _dbContext = dbContext;
     }
     
-    public async Task<bool> IsJtiBlacklistedAsync(string jti)
+    public async Task<bool> IsJtiBlacklistedAsync(string jti, CancellationToken cancellationToken)
     {
-        var jtiEntity = await _dbContext.Jtis.SingleOrDefaultAsync(j => j.JtiValue == jti);
+        var jtiEntity = await _dbContext.Jtis.SingleOrDefaultAsync(j => j.JtiValue == jti, cancellationToken);
         return jtiEntity != null;
     }
 

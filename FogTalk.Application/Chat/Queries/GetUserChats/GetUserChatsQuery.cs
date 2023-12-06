@@ -3,4 +3,4 @@ using FogTalk.Application.Chat.Dto;
 
 namespace FogTalk.Application.Chat.Queries;
 
-public record GetUserChatsQuery(int userId) : IQuery<IEnumerable<ChatDto>>;
+public record GetUserChatsQuery(int userId, CancellationToken token) : IQuery<IEnumerable<ChatDto>>;

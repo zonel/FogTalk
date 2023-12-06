@@ -2,6 +2,6 @@
 
 namespace FogTalk.Application.Chat.Commands.Join;
 
-public record JoinChatCommand(int userId, int chatId) : ICommand
+public record JoinChatCommand(int userId, int chatId, CancellationToken token) : ICommand
 {
 }

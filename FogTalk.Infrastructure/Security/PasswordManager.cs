@@ -16,7 +16,7 @@ internal sealed class PasswordManager : IPasswordManager
 
     public string Secure(string password) => _passwordHasher.HashPassword(default, password);
 
-    public bool Validate(string password, string securedPassword)
+    public bool ValidateAsync(string password, string securedPassword, CancellationToken token)
         => _passwordHasher.VerifyHashedPassword(default, securedPassword, password) ==
            PasswordVerificationResult.Success;
 }

@@ -1,9 +1,9 @@
-﻿
-using FogTalk.Application.Abstraction.Messaging;
+﻿using FogTalk.Application.Abstraction.Messaging;
 using FogTalk.Application.Message.Dto;
+using FogTalk.Application.Message.Queries.GetMessagesInChat;
 using FogTalk.Domain.Repositories;
 
-namespace FogTalk.Application.Message.Queries.GetMessagesInChat;
+namespace FogTalk.Application.Message.Queries.GetAllMessagesInChat;
 
 public class GetMessagesInChatCommandHandler : IQueryHandler<GetMessagesInChatCommand, IEnumerable<ShowMessageDto>>
 {

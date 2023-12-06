@@ -37,13 +37,16 @@ internal class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TK
     }
     
     //AddAsync
-    public async Task<int> AddAsync(TEntity entity)
+    public async Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        await _dbContext.Set<TEntity>().AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.Set<TEntity>().Add(entity);
+
+        // Perform the SaveChangesAsync operation with cancellationToken
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
         var property = _dbContext.Entry(entity).Property("Id");
         return (int)(property.CurrentValue ?? throw new InvalidOperationException());
-    }   
+    }  
 
     //UpdateAsync
     public async Task UpdateAsync(TEntity entity)

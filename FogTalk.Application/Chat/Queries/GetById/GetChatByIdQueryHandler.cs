@@ -16,7 +16,7 @@ public class GetChatByIdQueryHandler : IQueryHandler<GetChatByIdQuery, ChatDto>
     
     public async Task<ChatDto> Handle(GetChatByIdQuery request, CancellationToken cancellationToken)
     {
-        var chat = await _chatRepository.GetChatForUserByIdAsync(request.chatId, request.userId);
+        var chat = await _chatRepository.GetChatForUserByIdAsync(request.chatId, request.userId, cancellationToken);
         var chatDto = chat.Adapt<ChatDto>();
         return chatDto;
     }

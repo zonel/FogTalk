@@ -20,7 +20,7 @@ public class CreateChatCommandHandler : ICommandHandler<CreateChatCommand, int>
         Domain.Entities.Chat chat = request.ChatDto.Adapt<Domain.Entities.Chat>();
         chat.Name = chat.Name.Trim();
         chat.CreatedAt = DateTime.Now;
-        await _repository.AddAsync(chat);
+        await _repository.AddAsync(chat, cancellationToken);
         return chat.Id;
     }
 }

@@ -19,13 +19,13 @@ public class UpdateChatCommandHandler : ICommandHandler<UpdateChatCommand>
         var chatId = request.chat.Id;
         var userId = request.userId;
         
-        var currentChat = await _chatRepository.GetChatForUserByIdAsync(chatId, userId);
+        var currentChat = await _chatRepository.GetChatForUserByIdAsync(chatId, userId, cancellationToken);
         var updateChatDto = request.chat;
 
         if (HasChanges(currentChat, updateChatDto))
         {
             currentChat.Name = !string.IsNullOrEmpty(updateChatDto.Name) ? updateChatDto.Name : currentChat.Name;
-            await _chatRepository.UpdateAsync(currentChat);
+            await _chatRepository.UpdateAsync(currentChat, cancellationToken);
         }
         else
         {

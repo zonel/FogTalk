@@ -25,6 +25,6 @@ public class CreateMessageCommandHandler : ICommandHandler<CreateMessageCommand>
         message.SenderId = request.userId;
         message.Timestamp = DateTime.Now;
         message.MessageStatus = Domain.Enums.MessageStatus.Sent;
-        await _repository.AddAsync(message);
+        await _repository.AddAsync(message, cancellationToken);
     }
 }

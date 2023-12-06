@@ -3,4 +3,4 @@ using FogTalk.Application.Chat.Dto;
 
 namespace FogTalk.Application.Chat.Commands.Update;
 
-public record UpdateChatCommand(int userId, UpdateChatDto chat) : ICommand;
+public record UpdateChatCommand(int userId, UpdateChatDto chat, CancellationToken token) : ICommand;

@@ -34,7 +34,7 @@ public class Authenticator : IAuthenticator
         _jtiRepository = jtiRepository;
     }
     
-    public JwtDto CreateToken(int userId)
+    public JwtDto CreateTokenAsync(int userId, CancellationToken cancellationToken)
     {
         var now = DateTime.Now;
         var claims = new List<Claim>
@@ -53,11 +53,10 @@ public class Authenticator : IAuthenticator
         };
     }
 
-    //TODO: change to async
-    public async void InvalidateTokenAsync(JwtDto token)
+    public async void InvalidateTokenAsync(JwtDto token, CancellationToken cancellationToken)
     {
         var jti = _jtiRepository.ExtractJtiFromToken(token.AccessToken);
-        var jwtBlacklistedAlready = await _jtiRepository.IsJtiBlacklistedAsync(jti);
+        var jwtBlacklistedAlready = await _jtiRepository.IsJtiBlacklistedAsync(jti, cancellationToken);
         
         if (jwtBlacklistedAlready)
         {

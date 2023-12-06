@@ -3,5 +3,5 @@
 public interface IPasswordManager
 {
     string Secure(string password);
-    bool Validate(string password, string securedPassword);
+    bool ValidateAsync(string password, string securedPassword, CancellationToken token);
 }

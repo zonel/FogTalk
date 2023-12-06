@@ -25,11 +25,12 @@ public class AuthenticateUserCommandHandler : ICommandHandler<AuthenticateUserCo
 
     public async Task<JwtDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByEmailAsync(request.loginUserDto.Email);
+        cancellationToken = request.Token;
+        var user = await _userRepository.GetByEmailAsync(request.loginUserDto.Email, cancellationToken);
         if (user == null) throw new InvalidCredentialsException("Invalid email or password");
-        if (!_passwordManager.Validate(request.loginUserDto.Password, user.Password)) throw new InvalidCredentialsException("Invalid username or password");
+        if (!_passwordManager.ValidateAsync(request.loginUserDto.Password, user.Password, cancellationToken)) throw new InvalidCredentialsException("Invalid username or password");
         
-        var jwt = _authenticator.CreateToken(user.Id);
+        var jwt = _authenticator.CreateTokenAsync(user.Id, cancellationToken);
         return jwt;
     }
 }

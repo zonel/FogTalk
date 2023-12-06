@@ -20,7 +20,7 @@ public class GetUserChatsQueryHandler : IQueryHandler<GetUserChatsQuery, IEnumer
     
     public async Task<IEnumerable<ChatDto>> Handle(GetUserChatsQuery request, CancellationToken cancellationToken)
     {
-        var chats = await _chatRepository.GetChatsForUserAsync(request.userId);
+        var chats = await _chatRepository.GetChatsForUserAsync(request.userId, cancellationToken);
         var chatdtos = chats.Adapt<IEnumerable<ChatDto>>();
         return chatdtos;
     }

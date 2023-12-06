@@ -2,4 +2,4 @@
 
 namespace FogTalk.Application.Chat.Commands.Delete;
 
-public record DeleteChatCommand(int userId, int chatId) : ICommand;
+public record DeleteChatCommand(int userId, int chatId, CancellationToken Token) : ICommand;

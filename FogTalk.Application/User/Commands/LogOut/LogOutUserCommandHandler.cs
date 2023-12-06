@@ -16,7 +16,7 @@ public class LogOutUserCommandHandler: ICommandHandler<LogOutUserCommand,JwtDto>
     
     public Task<JwtDto> Handle(LogOutUserCommand request, CancellationToken cancellationToken)
     {
-        _authenticator.InvalidateTokenAsync(request.jwtDto);
+        _authenticator.InvalidateTokenAsync(request.jwtDto, cancellationToken);
         return Task.FromResult(request.jwtDto);
     }
 }

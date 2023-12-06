@@ -24,15 +24,17 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
     public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        if (await _userRepository.UserExistsAsync(u => u.UserName == request.UserDto.UserName))
+        cancellationToken = request.Token;
+        if (await _userRepository.UserExistsAsync(u => u.UserName == request.UserDto.UserName, cancellationToken))
             throw new UsernameTakenException("Username is already taken");
-        if (await _userRepository.UserExistsAsync(u => u.Email == request.UserDto.Email))
+        if (await _userRepository.UserExistsAsync(u => u.Email == request.UserDto.Email,cancellationToken))
             throw new EmailTakenException("Email is already taken");
-        
         
         Domain.Entities.User user = request.UserDto.Adapt<Domain.Entities.User>();
         user.CreatedAt = DateTime.Now;
         user.Password =  _passwordManager.Secure(user.Password);
-        await _repository.AddAsync(user);
+        await Task.Delay(20000, cancellationToken); // Delay without blocking the thread
+        
+        await _repository.AddAsync(user, cancellationToken);
     }
 }

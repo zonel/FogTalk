@@ -3,6 +3,6 @@ using FogTalk.Application.Security.Dto;
 
 namespace FogTalk.Application.User.Commands.LogOut;
 
-public record LogOutUserCommand(JwtDto jwtDto) : ICommand<JwtDto>
+public record LogOutUserCommand(JwtDto jwtDto, CancellationToken Token) : ICommand<JwtDto>
 {
 }

@@ -17,10 +17,10 @@ public class LeaveChatCommandHandler : ICommandHandler<LeaveChatCommand>
     public async Task Handle(LeaveChatCommand request, CancellationToken cancellationToken)
     {
         //idempotency check
-        if (await _chatRepository.GetChatForUserByIdAsync(request.chatId, request.userId) == null)
+        if (await _chatRepository.GetChatForUserByIdAsync(request.chatId, request.userId, cancellationToken) == null)
             throw new IdempotencyException("User does not belong to this chat.");
         
-        await _chatRepository.RemoveUserFromChatAsync(request.userId, request.chatId);
+        await _chatRepository.RemoveUserFromChatAsync(request.userId, request.chatId, cancellationToken);
     }
 
 }

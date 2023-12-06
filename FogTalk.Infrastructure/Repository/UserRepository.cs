@@ -28,10 +28,10 @@ public class UserRepository : IUserRepository
         return user;
     }
     
-    public async Task<bool> UserExistsAsync(Expression<Func<User, bool>> predicate)
+    public async Task<bool> UserExistsAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken)
     {
         var userExists = await _dbContext.Users
-            .AnyAsync(predicate);
+            .AnyAsync(predicate, cancellationToken);
         return userExists;
     }
 
@@ -47,10 +47,10 @@ public class UserRepository : IUserRepository
             .AnyAsync(m => m.Id == messageId && m.SenderId == userId);
     }
 
-    public async Task<User> GetByEmailAsync(string email)
+    public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         return user ?? new User();
     }
 

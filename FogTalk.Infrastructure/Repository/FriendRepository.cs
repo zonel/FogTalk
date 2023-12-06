@@ -18,12 +18,12 @@ public class FriendRepository : IFriendRepository
         _dbContext = dbContext;
         _userRepository = userRepository;
     }
-    public async Task<IEnumerable<T>> GetUserFriendsAsync<T>(int userId)
+    public async Task<IEnumerable<T>> GetUserFriendsAsync<T>(int userId, CancellationToken cancellationToken)
     {
         var friends = await _dbContext.Users
             .Where(u => u.Id == userId)
             .SelectMany(u => u.Friends)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         if (friends.Count == 0)
         {
@@ -33,12 +33,12 @@ public class FriendRepository : IFriendRepository
         var showUserDtos = friends.Adapt<List<T>>();
         return showUserDtos;
     }
-    public async Task<IEnumerable<T>> GetUsersFriendRequestsAsync<T>(int userId)
+    public async Task<IEnumerable<T>> GetUsersFriendRequestsAsync<T>(int userId, CancellationToken cancellationToken)
     {
         var friendRequests = await _dbContext.Users
             .Where(u => u.Id == userId)
             .SelectMany(u => u.FriendRequests)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
         
         if (friendRequests.Count() == 0)
         {
@@ -60,11 +60,11 @@ public class FriendRepository : IFriendRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task HandleFriendRequestAsync(int requestedUserId, int requestingUserId, bool isAccepted)
+    public async Task HandleFriendRequestAsync(int requestedUserId, int requestingUserId, bool isAccepted, CancellationToken cancellationToken)
     {
-        var requestedUser = await _userRepository.GetByIdAsync(requestedUserId, u => u.Include(u => u.Friends));
-        var requestedUserWithFriendRequests = await _userRepository.GetByIdAsync(requestedUserId, u => u.Include(u => u.FriendRequests));
-        var requestingUser = await _userRepository.GetByIdAsync(requestingUserId, u => u.Include(u => u.Friends));
+        var requestedUser = await _userRepository.GetByIdAsync(requestedUserId,cancellationToken, u => u.Include(u => u.Friends));
+        var requestedUserWithFriendRequests = await _userRepository.GetByIdAsync(requestedUserId,cancellationToken, u => u.Include(u => u.FriendRequests));
+        var requestingUser = await _userRepository.GetByIdAsync(requestingUserId,cancellationToken, u => u.Include(u => u.Friends));
 
         if (requestingUser == null || requestedUser == null)
             throw new InvalidOperationException("User not found");
@@ -91,10 +91,10 @@ public class FriendRepository : IFriendRepository
 
 }
 
-    public async Task RemoveFriendAsync(int userId, int userToDeleteId)
+    public async Task RemoveFriendAsync(int userId, int userToDeleteId, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users.FindAsync(userId);
-        var userToDelete = await _dbContext.Users.FindAsync(userToDeleteId);
+        var user = await _dbContext.Users.FindAsync(userId, cancellationToken);
+        var userToDelete = await _dbContext.Users.FindAsync(userToDeleteId, cancellationToken);
         
         //idempotency check
         if(user.Friends.Any(f => f.Id == userToDeleteId) == false)
@@ -104,8 +104,7 @@ public class FriendRepository : IFriendRepository
         {
             user.Friends.Remove(userToDelete);
             userToDelete.Friends.Remove(user);
-
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
             return;
         }
     }

@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public async Task<User> GetByIdAsync(int id, Func<IQueryable<User>, IQueryable<User>> include = null)
+    public async Task<User> GetByIdAsync(int id, CancellationToken cancellationToken, Func<IQueryable<User>, IQueryable<User>> include = null)
     {
         IQueryable<User> query = _dbContext.Users;
 
@@ -24,7 +24,7 @@ public class UserRepository : IUserRepository
             query = include(query);
         }
 
-        var user = await query.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await query.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         return user;
     }
     

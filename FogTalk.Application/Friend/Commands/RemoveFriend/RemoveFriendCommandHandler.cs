@@ -1,7 +1,8 @@
 ﻿using FogTalk.Application.Abstraction.Messaging;
+using FogTalk.Application.Friend.Commands.Delete;
 using FogTalk.Domain.Repositories;
 
-namespace FogTalk.Application.Friend.Commands.Delete;
+namespace FogTalk.Application.Friend.Commands.RemoveFriend;
 
 public class RemoveFriendCommandHandler : ICommandHandler<RemoveFriendCommand>
 {
@@ -14,6 +15,6 @@ public class RemoveFriendCommandHandler : ICommandHandler<RemoveFriendCommand>
     
     public async Task Handle(RemoveFriendCommand request, CancellationToken cancellationToken)
     {
-        await _friendRepository.RemoveFriendAsync(request.userId, request.userToDeleteId);
+        await _friendRepository.RemoveFriendAsync(request.userId, request.userToDeleteId, cancellationToken);
     }
 }

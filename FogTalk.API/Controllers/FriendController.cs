@@ -4,7 +4,6 @@ using FogTalk.Application.Friend.Commands.Update;
 using FogTalk.Application.Friend.Dto;
 using FogTalk.Application.Friend.Queries.Get;
 using FogTalk.Application.Friend.Queries.GetFriendRequests;
-using FogTalk.Application.User.Dto;
 using FogTalk.Infrastructure.SignalR;
 using MediatR;
 using Microsoft.AspNet.SignalR;
@@ -34,11 +33,11 @@ public class FriendController : ControllerBase
     /// List of friends.
     /// </returns>
     [HttpGet]
-    public async Task<IEnumerable<ShowFriendDto>> Get()
+    public async Task<IEnumerable<ShowFriendDto>> Get(CancellationToken cancellationToken)
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        var friends = await _mediator.Send(new GetUserFriendsQuery(Convert.ToInt32(userId)));
-        return friends ?? new List<ShowFriendDto>();
+        var friends = await _mediator.Send(new GetUserFriendsQuery(Convert.ToInt32(userId), cancellationToken));
+        return friends;
     }
     
     /// <summary>
@@ -48,10 +47,10 @@ public class FriendController : ControllerBase
     /// List of friend requests.
     /// </returns>
     [HttpGet("requests")]
-    public async Task<IEnumerable<ShowFriendRequestDto>> GetFriendRequests()
+    public async Task<IEnumerable<ShowFriendRequestDto>> GetFriendRequests(CancellationToken cancellationToken)
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        var friends = await _mediator.Send(new GetUserFriendRequestsQuery(Convert.ToInt32(userId)));
+        var friends = await _mediator.Send(new GetUserFriendRequestsQuery(Convert.ToInt32(userId), cancellationToken));
         return friends;
     }
         
@@ -61,11 +60,11 @@ public class FriendController : ControllerBase
     /// </summary>
     /// <param name="receivingUserId"> Id of the user that will receive friend request.</param>
     [HttpGet("{receivingUserId}")]
-    public async Task<IActionResult> SendFriendRequest([FromRoute] int receivingUserId)
+    public async Task<IActionResult> SendFriendRequest([FromRoute] int receivingUserId, CancellationToken cancellationToken)
     {
         var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new SendFriendRequestCommand(Convert.ToInt32(currentUserId), receivingUserId));
-        await _userHubContext.Clients.User(receivingUserId.ToString()).SendFriendRequestNotification(receivingUserId);
+        await _mediator.Send(new SendFriendRequestCommand(Convert.ToInt32(currentUserId), receivingUserId), cancellationToken);
+        await _userHubContext.Clients.User(receivingUserId.ToString()).SendFriendRequestNotification(receivingUserId, cancellationToken);
         return Ok();
     }
     
@@ -75,10 +74,10 @@ public class FriendController : ControllerBase
     /// <param name="requestingUserId"> Id of the user that sent a friend request.</param>
     /// <param name="Accepted">accepted/declined</param>
     [HttpPut("{requestingUserId}")]
-    public async Task<IActionResult> RespondToFriendRequest([FromRoute] int requestingUserId, [FromBody] bool Accepted)
+    public async Task<IActionResult> RespondToFriendRequest([FromRoute] int requestingUserId, [FromBody] bool Accepted, CancellationToken cancellationToken)
     {
         var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new RespondToFriendRequestCommand(Convert.ToInt32(currentUserId), requestingUserId, Accepted));
+        await _mediator.Send(new RespondToFriendRequestCommand(Convert.ToInt32(currentUserId), requestingUserId, Accepted, cancellationToken));
         return Ok();
     }
     
@@ -87,10 +86,10 @@ public class FriendController : ControllerBase
     /// </summary>
     /// <param name="userToRemoveId"> Id of the user to remove.</param>
     [HttpDelete]
-    public async Task<IActionResult> RemoveFriend([FromBody] int userToRemoveId)
+    public async Task<IActionResult> RemoveFriend([FromBody] int userToRemoveId, CancellationToken cancellationToken)
     {
         var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new RemoveFriendCommand(Convert.ToInt32(currentUserId), userToRemoveId));
+        await _mediator.Send(new RemoveFriendCommand(Convert.ToInt32(currentUserId), userToRemoveId, cancellationToken));
         return Ok();
     }
 

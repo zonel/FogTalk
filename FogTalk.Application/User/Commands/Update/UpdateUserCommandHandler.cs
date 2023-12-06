@@ -16,7 +16,7 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
     
     public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.userId);
+        var user = await _userRepository.GetByIdAsync(request.userId, cancellationToken);
         var updateUserDto = request.userDto;
 
         if (HasChanges(user, updateUserDto))

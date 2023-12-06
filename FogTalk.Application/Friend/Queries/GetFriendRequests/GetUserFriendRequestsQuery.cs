@@ -3,4 +3,4 @@ using FogTalk.Application.Friend.Dto;
 
 namespace FogTalk.Application.Friend.Queries.GetFriendRequests;
 
-public record GetUserFriendRequestsQuery(int userId) : IQuery<IEnumerable<ShowFriendRequestDto>>;
+public record GetUserFriendRequestsQuery(int userId, CancellationToken Token) : IQuery<IEnumerable<ShowFriendRequestDto>>;

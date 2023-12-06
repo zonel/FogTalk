@@ -19,7 +19,7 @@ public class GetUserQueryHandler : IQueryHandler<GetUserQuery, ShowUserDto>
     public async Task<ShowUserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         //add check if JWT token is valid 
-        var user = await _userRepository.GetByIdAsync(request.userId);
+        var user = await _userRepository.GetByIdAsync(request.userId, cancellationToken);
         var userDto = user.Adapt<ShowUserDto>();
         return userDto;
     }

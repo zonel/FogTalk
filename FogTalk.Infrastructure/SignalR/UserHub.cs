@@ -12,8 +12,8 @@ public class UserHub : Hub
         _mediator = mediator;
     }
     
-    public async Task SendFriendRequestNotification(int receivingUserId)
+    public async Task SendFriendRequestNotification(int receivingUserId, CancellationToken cancellationToken)
     {
-        await Clients.User(receivingUserId.ToString()).SendAsync("ReceiveFriendRequestNotification");
+        await Clients.User(receivingUserId.ToString()).SendAsync("ReceiveFriendRequestNotification", cancellationToken);
     }
 }

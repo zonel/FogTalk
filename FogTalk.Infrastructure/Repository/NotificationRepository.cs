@@ -13,11 +13,11 @@ public class NotificationRepository : INotificationRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<IEnumerable<T>> GetNotificationsAsync<T>(int userId)
+    public async Task<IEnumerable<T>> GetNotificationsAsync<T>(int userId, CancellationToken cancellationToken)
     {
         var friends = await _dbContext.Notifications
             .Where(u => u.Id == userId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         if (friends.Count == 0)
         {
@@ -28,10 +28,10 @@ public class NotificationRepository : INotificationRepository
         return showUserDtos;
     }
 
-    public async Task MarkNotificationAsReadAsync(int userId, int notificationId)
+    public async Task MarkNotificationAsReadAsync(int userId, int notificationId, CancellationToken cancellationToken)
     {
         var notification = await _dbContext.Notifications
-            .FirstOrDefaultAsync(u => u.Id == userId && u.Id == notificationId);
+            .FirstOrDefaultAsync(u => u.Id == userId && u.Id == notificationId, cancellationToken);
 
         if (notification == null)
         {
@@ -40,7 +40,7 @@ public class NotificationRepository : INotificationRepository
 
         notification.IsRead = true;
         _dbContext.Notifications.Update(notification);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteNotificationAsync(int userId, int notificationId)

@@ -14,6 +14,6 @@ public class MarkNotificationAsReadCommandHandler : ICommandHandler<MarkNotifica
     
     public async Task Handle(MarkNotificationAsReadCommand request, CancellationToken cancellationToken)
     {
-        await _notificationRepository.MarkNotificationAsReadAsync(request.userId, request.notificationId);
+        await _notificationRepository.MarkNotificationAsReadAsync(request.userId, request.notificationId, cancellationToken);
     }
 }

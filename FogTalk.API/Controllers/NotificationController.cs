@@ -29,11 +29,11 @@ public class NotificationController : ControllerBase
     /// List of notifications
     /// </returns>
     [HttpGet]
-    public async Task<IEnumerable<NotificationDto>> Get()
+    public async Task<IEnumerable<NotificationDto>> Get(CancellationToken cancellationToken)
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        var notifications = await _mediator.Send(new GetNotificationsForUserQuery(Convert.ToInt32(userId)));
-        return notifications ?? new List<NotificationDto>();
+        var notifications = await _mediator.Send(new GetNotificationsForUserQuery(Convert.ToInt32(userId), cancellationToken));
+        return notifications;
     }
     
     /// <summary>
@@ -41,10 +41,10 @@ public class NotificationController : ControllerBase
     /// </summary>
     /// <param name="notificationId">Id of a notification</param>
     [HttpPost("{notificationId}")]
-    public async Task MarkAsRead([FromRoute] int notificationId)
+    public async Task MarkAsRead([FromRoute] int notificationId, CancellationToken cancellationToken)
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new MarkNotificationAsReadCommand(Convert.ToInt32(userId), notificationId));
+        await _mediator.Send(new MarkNotificationAsReadCommand(Convert.ToInt32(userId), notificationId, cancellationToken));
     }
     
 }

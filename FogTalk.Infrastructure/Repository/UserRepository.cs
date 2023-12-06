@@ -41,10 +41,10 @@ public class UserRepository : IUserRepository
             .AnyAsync(cu => cu.Id == chatId && cu.Participants.Any(u => u.Id == userId));
     }
     
-    public Task<bool> UserHasAccessToMessageAsync(int userId, int messageId)
+    public Task<bool> UserHasAccessToMessageAsync(int userId, int messageId, CancellationToken cancellationToken)
     {
         return _dbContext.Messages
-            .AnyAsync(m => m.Id == messageId && m.SenderId == userId);
+            .AnyAsync(m => m.Id == messageId && m.SenderId == userId, cancellationToken);
     }
 
     public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken)

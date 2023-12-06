@@ -42,10 +42,10 @@ public class MessageController : ControllerBase
     /// <param name="chatId">Id of a chat to send message in.</param>
     /// <param name="messageDto">Dto containing all essential informations to send message.</param>
     [HttpPost("{chatId}")]
-    public async Task<IActionResult> Create([FromRoute] int chatId, [FromBody] MessageDto messageDto)
+    public async Task<IActionResult> Create([FromRoute] int chatId, [FromBody] MessageDto messageDto, CancellationToken cancellationToken)
     {
         var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new CreateMessageCommand(messageDto, chatId, Convert.ToInt32(id)));
+        await _mediator.Send(new CreateMessageCommand(messageDto, chatId, Convert.ToInt32(id), cancellationToken));
         return Ok();
     }
 
@@ -56,10 +56,10 @@ public class MessageController : ControllerBase
     /// <param name="messageId">Id of a message to delete.</param>
     /// <returns></returns>
     [HttpDelete("{chatId}/{messageId}")]
-    public async Task<IActionResult> Delete([FromRoute] int chatId,[FromRoute] int messageId)
+    public async Task<IActionResult> Delete([FromRoute] int chatId,[FromRoute] int messageId, CancellationToken cancellationToken)
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new DeleteMessageCommand(messageId, Convert.ToInt32(userId)));
+        await _mediator.Send(new DeleteMessageCommand(messageId, Convert.ToInt32(userId), cancellationToken));
         return Ok();
     }
 

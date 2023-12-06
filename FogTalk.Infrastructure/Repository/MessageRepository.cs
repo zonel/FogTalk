@@ -23,7 +23,7 @@ public class MessageRepository : IMessageRepository
 
         if (!string.IsNullOrEmpty(cursor))
         {
-            var cursorMessage = await _dbContext.Messages.FindAsync(Convert.ToInt32(cursor));
+            var cursorMessage = await _dbContext.Messages.FindAsync(Convert.ToInt32(cursor), cancellationToken);
 
             if (cursorMessage != null)
             {

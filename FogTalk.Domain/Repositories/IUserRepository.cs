@@ -12,6 +12,6 @@ public interface IUserRepository
     Task UpdateAsync(User user);
     public Task<bool> UserExistsAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken);
     public Task<bool> UserHasAccessToChatAsync(int userId, int chatId);
-    public Task<bool> UserHasAccessToMessageAsync(int userId, int chatId);
+    public Task<bool> UserHasAccessToMessageAsync(int userId, int chatId, CancellationToken cancellationToken);
 
 }

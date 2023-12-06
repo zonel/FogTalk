@@ -14,10 +14,10 @@ public class ChatHub : Hub
         _mediator = mediator;
     }
     
-    public async Task SendMessageToChat(int chatId, string message)
+    public async Task SendMessageToChat(int chatId, string message, CancellationToken cancellationToken)
     {
         var userId = Context.User.Identity.Name;
-        await _mediator.Send(new CreateMessageCommand(new MessageDto(message), chatId, Convert.ToInt32(userId)));
-        await Clients.Group(chatId.ToString()).SendAsync("ReceiveMessage", message);
+        await _mediator.Send(new CreateMessageCommand(new MessageDto(message), chatId, Convert.ToInt32(userId), cancellationToken));
+        await Clients.Group(chatId.ToString()).SendAsync("ReceiveMessage", message, cancellationToken);
     }
 }

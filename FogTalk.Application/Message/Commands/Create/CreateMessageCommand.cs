@@ -4,4 +4,4 @@ using FogTalk.Application.Message.Dto;
 
 namespace FogTalk.Application.Message.Commands.Create;
 
-public record CreateMessageCommand(MessageDto messageDto, int chatId, int userId) : ICommand;
+public record CreateMessageCommand(MessageDto messageDto, int chatId, int userId, CancellationToken CancellationToken) : ICommand;

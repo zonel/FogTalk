@@ -13,6 +13,7 @@ public class SendFriendRequestCommandHandler : ICommandHandler<SendFriendRequest
     }
     public async Task Handle(SendFriendRequestCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.Token;
         await _friendRepository.SendFriendRequestAsync(request.currentUserId, request.receivingUserId);
     }
 }

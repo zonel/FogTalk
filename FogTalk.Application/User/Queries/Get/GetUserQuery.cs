@@ -4,6 +4,6 @@ using FogTalk.Application.User.Dto;
 
 namespace FogTalk.Application.User.Queries.Get;
 
-public record GetUserQuery(int userId) : IQuery<ShowUserDto>
+public record GetUserQuery(int userId, CancellationToken Token) : IQuery<ShowUserDto>
 {
 }

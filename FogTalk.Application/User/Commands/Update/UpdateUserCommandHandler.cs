@@ -16,6 +16,7 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
     
     public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.Token;
         var user = await _userRepository.GetByIdAsync(request.userId, cancellationToken);
         var updateUserDto = request.userDto;
 
@@ -26,7 +27,7 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
             user.Bio = !string.IsNullOrEmpty(updateUserDto.Bio) ? updateUserDto.Bio : user.Bio;
             user.ProfilePicture = !string.IsNullOrEmpty(updateUserDto.ProfilePicture) ? updateUserDto.ProfilePicture : user.ProfilePicture;
 
-            await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user, cancellationToken);
         }
         else
         {

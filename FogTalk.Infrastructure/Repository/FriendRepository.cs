@@ -74,8 +74,8 @@ public class FriendRepository : IFriendRepository
             requestedUser.Friends.Add(requestingUser);
             requestingUser.Friends.Add(requestedUser);
 
-            await _userRepository.UpdateAsync(requestedUser);
-            await _userRepository.UpdateAsync(requestingUser);
+            await _userRepository.UpdateAsync(requestedUser, cancellationToken);
+            await _userRepository.UpdateAsync(requestingUser, cancellationToken);
             
             //remove friend request
             requestedUserWithFriendRequests.FriendRequests.Remove(requestingUser);
@@ -85,7 +85,7 @@ public class FriendRepository : IFriendRepository
         else
         {
             requestedUser.FriendRequests.Remove(requestingUser);
-            await _userRepository.UpdateAsync(requestedUser);
+            await _userRepository.UpdateAsync(requestedUser, cancellationToken);
             await _dbContext.SaveChangesAsync();
         }
 

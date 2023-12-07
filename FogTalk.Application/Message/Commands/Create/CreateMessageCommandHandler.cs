@@ -16,6 +16,7 @@ public class CreateMessageCommandHandler : ICommandHandler<CreateMessageCommand>
     }
     public async Task Handle(CreateMessageCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.CancellationToken;
         //check if user has access to chat
         if(!await _userRepository.UserHasAccessToChatAsync(request.userId, request.chatId))
             throw new UnauthorizedAccessException("You don't have access to this chat");

@@ -14,6 +14,7 @@ public class SearchUserQueryHandler : IQueryHandler<SearchUserQuery, IEnumerable
     }
     public async Task<IEnumerable<ShowUserDto>> Handle(SearchUserQuery request, CancellationToken cancellationToken)
     {
-        return await _userSearchRepository.SearchAsync<ShowUserDto>(request.searchPhrase);
+        cancellationToken = request.Token;
+        return await _userSearchRepository.SearchAsync<ShowUserDto>(request.searchPhrase, cancellationToken);
     }
 }

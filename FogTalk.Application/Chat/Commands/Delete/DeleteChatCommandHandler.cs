@@ -14,6 +14,7 @@ public class DeleteChatCommandHandler : ICommandHandler<DeleteChatCommand>
     }
     public async Task Handle(DeleteChatCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.Token;
         if (_chatRepository.GetChatForUserByIdAsync(request.chatId, request.userId, cancellationToken) == null)
             throw new Exception("User is not a member of this chat.");
         

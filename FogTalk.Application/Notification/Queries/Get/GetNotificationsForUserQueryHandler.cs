@@ -14,6 +14,7 @@ public class GetNotificationsForUserQueryHandler : IQueryHandler<GetNotification
     }
     public async Task<IEnumerable<NotificationDto>> Handle(GetNotificationsForUserQuery request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.CancellationToken;
         return await _notificationRepository.GetNotificationsAsync<NotificationDto>(request.userId, cancellationToken);
     }
 }

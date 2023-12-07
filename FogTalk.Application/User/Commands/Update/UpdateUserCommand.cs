@@ -3,6 +3,6 @@ using FogTalk.Application.User.Dto;
 
 namespace FogTalk.Application.User.Commands.Update;
 
-public record UpdateUserCommand(UpdateUserDto userDto, int userId) : ICommand
+public record UpdateUserCommand(UpdateUserDto userDto, int userId, CancellationToken Token) : ICommand
 {
 }

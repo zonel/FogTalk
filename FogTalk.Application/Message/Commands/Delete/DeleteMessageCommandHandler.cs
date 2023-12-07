@@ -15,6 +15,7 @@ public class DeleteMessageCommandHandler : ICommandHandler<DeleteMessageCommand>
     }
     public async Task Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.CancellationToken;
         //check if user has access to chat
         if(!await _userRepository.UserHasAccessToMessageAsync(request.userId, request.messageId, cancellationToken))
             throw new UnauthorizedAccessException("You don't have access to this message");

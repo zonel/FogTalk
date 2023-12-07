@@ -9,7 +9,7 @@ public interface IUserRepository
     Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken);
     Task<User> GetByUsernameAsync(string username);
     Task AddAsync(User user);
-    Task UpdateAsync(User user);
+    Task UpdateAsync(User user, CancellationToken cancellationToken);
     public Task<bool> UserExistsAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken);
     public Task<bool> UserHasAccessToChatAsync(int userId, int chatId);
     public Task<bool> UserHasAccessToMessageAsync(int userId, int chatId, CancellationToken cancellationToken);

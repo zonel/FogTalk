@@ -16,6 +16,7 @@ public class UpdateChatCommandHandler : ICommandHandler<UpdateChatCommand>
     
     public async Task Handle(UpdateChatCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.token;
         var chatId = request.chat.Id;
         var userId = request.userId;
         

@@ -15,6 +15,7 @@ public class JoinChatCommandHandler : ICommandHandler<JoinChatCommand>
     
     public async Task Handle(JoinChatCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.token;
         //idempotency check
         if (await _chatRepository.GetChatForUserByIdAsync(request.chatId, request.userId, cancellationToken) != null)
             throw new IdempotencyException("User is already in chat");

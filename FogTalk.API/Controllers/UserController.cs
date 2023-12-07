@@ -77,7 +77,7 @@ public class UserController : ControllerBase
     public async Task<ShowUserDto> GetCurrentUser(CancellationToken token)
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        return await _mediator.Send(new GetUserQuery(Convert.ToInt32(userId)));
+        return await _mediator.Send(new GetUserQuery(Convert.ToInt32(userId), token));
     }
     
     /// <summary>
@@ -88,7 +88,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult> UpdateCurrentUser([FromBody] UpdateUserDto userDto, CancellationToken token)
     {
         var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new UpdateUserCommand(userDto, Convert.ToInt32(userId)));
+        await _mediator.Send(new UpdateUserCommand(userDto, Convert.ToInt32(userId), token));
         return Ok();
     }
 }

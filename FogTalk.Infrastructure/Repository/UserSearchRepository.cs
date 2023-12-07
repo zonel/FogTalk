@@ -14,9 +14,9 @@ public class UserSearchRepository : IUserSearchRepository
         _dbContext = dbContext;
     }
     
-    public async Task<IEnumerable<T>> SearchAsync<T>(string searchPhrase)
+    public async Task<IEnumerable<T>> SearchAsync<T>(string searchPhrase, CancellationToken token)
     {
-        var users = await _dbContext.Users.Where(u => u.UserName.Contains(searchPhrase)).ToListAsync();
+        var users = await _dbContext.Users.Where(u => u.UserName.Contains(searchPhrase)).ToListAsync(token);
         
         if (users.Count == 0)
         {

@@ -24,9 +24,9 @@ public class UserSearchController : ControllerBase
     /// </summary>
     /// <param name="searchPhrase">Phrase that must be contained in user's username.</param>
     [HttpGet("user")]
-    public async Task<IEnumerable<ShowUserDto>> SearchUsers([FromBody] string searchPhrase)
+    public async Task<IEnumerable<ShowUserDto>> SearchUsers([FromBody] string searchPhrase, CancellationToken token)
     {
-        var searchResults = await _mediator.Send(new SearchUserQuery(searchPhrase));
+        var searchResults = await _mediator.Send(new SearchUserQuery(searchPhrase, token));
         return searchResults ?? new List<ShowUserDto>();
     }
 }

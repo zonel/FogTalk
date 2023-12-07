@@ -15,6 +15,7 @@ public class GetMessagesInChatCommandHandler : IQueryHandler<GetMessagesInChatCo
     }
     public async Task<IEnumerable<ShowMessageDto>> Handle(GetMessagesInChatCommand request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.cancellationToken;
         return await _messageRepository.GetMessagesAsync<ShowMessageDto>(request.chatId, request.cursor, request.pageSize,cancellationToken);
     }
 }

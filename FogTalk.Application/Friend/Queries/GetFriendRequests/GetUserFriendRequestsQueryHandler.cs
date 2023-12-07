@@ -15,6 +15,7 @@ public class GetUserFriendRequestsQueryHandler : IQueryHandler<GetUserFriendRequ
     
     public async Task<IEnumerable<ShowFriendRequestDto>> Handle(GetUserFriendRequestsQuery request, CancellationToken cancellationToken)
     {
+        cancellationToken = request.Token;
         return await _friendRepository.GetUsersFriendRequestsAsync<ShowFriendRequestDto>(request.userId, cancellationToken);
     }
 }

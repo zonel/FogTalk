@@ -63,7 +63,7 @@ public class FriendController : ControllerBase
     public async Task<IActionResult> SendFriendRequest([FromRoute] int receivingUserId, CancellationToken cancellationToken)
     {
         var currentUserId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
-        await _mediator.Send(new SendFriendRequestCommand(Convert.ToInt32(currentUserId), receivingUserId), cancellationToken);
+        await _mediator.Send(new SendFriendRequestCommand(Convert.ToInt32(currentUserId), receivingUserId, cancellationToken));
         await _userHubContext.Clients.User(receivingUserId.ToString()).SendFriendRequestNotification(receivingUserId, cancellationToken);
         return Ok();
     }

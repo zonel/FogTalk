@@ -2,5 +2,5 @@
 
 public interface IUserSearchRepository
 {
-    public Task<IEnumerable<T>> SearchAsync<T>(string searchPhrase);
+    public Task<IEnumerable<T>> SearchAsync<T>(string searchPhrase, CancellationToken token);
 }

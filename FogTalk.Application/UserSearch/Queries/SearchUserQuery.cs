@@ -3,4 +3,4 @@ using FogTalk.Application.User.Dto;
 
 namespace FogTalk.Application.UserSearch.Commands;
 
-public record SearchUserQuery(string searchPhrase) : IQuery<IEnumerable<ShowUserDto>>;
+public record SearchUserQuery(string searchPhrase, CancellationToken Token) : IQuery<IEnumerable<ShowUserDto>>;

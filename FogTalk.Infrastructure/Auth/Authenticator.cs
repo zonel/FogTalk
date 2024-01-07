@@ -34,7 +34,7 @@ public class Authenticator : IAuthenticator
         _jtiRepository = jtiRepository;
     }
     
-    public JwtDto CreateTokenAsync(int userId, CancellationToken cancellationToken)
+    public async Task<JwtDto> CreateTokenAsync(int userId, CancellationToken cancellationToken)
     {
         var now = DateTime.Now;
         var claims = new List<Claim>

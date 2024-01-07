@@ -30,7 +30,7 @@ public class AuthenticateUserCommandHandler : ICommandHandler<AuthenticateUserCo
         if (user == null) throw new InvalidCredentialsException("Invalid email or password");
         if (!_passwordManager.ValidateAsync(request.loginUserDto.Password, user.Password, cancellationToken)) throw new InvalidCredentialsException("Invalid username or password");
         
-        var jwt = _authenticator.CreateTokenAsync(user.Id, cancellationToken);
+        var jwt = await _authenticator.CreateTokenAsync(user.Id, cancellationToken);
         return jwt;
     }
 }

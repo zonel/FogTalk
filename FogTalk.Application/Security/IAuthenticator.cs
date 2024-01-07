@@ -4,6 +4,6 @@ namespace FogTalk.Application.Security;
 
 public interface IAuthenticator
 {
-    JwtDto CreateTokenAsync(int userId, CancellationToken token);
+    Task<JwtDto> CreateTokenAsync(int userId, CancellationToken token);
     void InvalidateTokenAsync(JwtDto token, CancellationToken cancellationToken);
 }

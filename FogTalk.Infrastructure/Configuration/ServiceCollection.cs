@@ -7,15 +7,15 @@ using FogTalk.Infrastructure.Auth;
 using FogTalk.Infrastructure.Persistence;
 using FogTalk.Infrastructure.Repository;
 using FogTalk.Infrastructure.Security;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
-namespace FogTalk.Infrastructure.ServicesConfiguration;
+namespace FogTalk.Infrastructure.Configuration;
 
 public static class ServiceCollection
 {

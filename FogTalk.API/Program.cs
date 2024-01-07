@@ -3,9 +3,9 @@ using FogTalk.API.Configuration;
 using FogTalk.Application.Abstraction;
 using FogTalk.Application.Configuration;
 using FogTalk.Application.Security;
+using FogTalk.Infrastructure.Configuration;
 using FogTalk.Infrastructure.Exceptions;
 using FogTalk.Infrastructure.Persistence;
-using FogTalk.Infrastructure.ServicesConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 

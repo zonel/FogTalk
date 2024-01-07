@@ -33,7 +33,6 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         Domain.Entities.User user = request.UserDto.Adapt<Domain.Entities.User>();
         user.CreatedAt = DateTime.Now;
         user.Password =  _passwordManager.Secure(user.Password);
-        await Task.Delay(20000, cancellationToken); // Delay without blocking the thread
         
         await _repository.AddAsync(user, cancellationToken);
     }

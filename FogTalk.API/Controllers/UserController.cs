@@ -54,7 +54,7 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<JwtDto> Login([FromBody] LoginUserDto loginUserDto, CancellationToken token)
     {
-        return await _mediator.Send(new AuthenticateUserCommand(loginUserDto, token));
+        return await _mediator.Send(new AuthenticateUserCommand(loginUserDto, token)); //TODO FIX
     }
     
     /// <summary>

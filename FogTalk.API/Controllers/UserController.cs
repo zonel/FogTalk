@@ -12,6 +12,9 @@ using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace FogTalk.API.Controllers;
 
+/// <summary>
+/// 
+/// </summary>
 [ApiController]
 [Authorize(Policy = "JtiPolicy")]
 [Route("api/[controller]")]
@@ -19,15 +22,20 @@ public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mediator"></param>
     public UserController(IMediator mediator)
     {
         _mediator = mediator;
     }
-    
+
     /// <summary>
     /// Create a new user
     /// </summary>
     /// <param name="userDto">Dto containing information required to create new user</param>
+    /// <param name="token"></param>
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult> Create([FromBody] UserDto userDto, CancellationToken token)
@@ -45,22 +53,24 @@ public class UserController : ControllerBase
         await _mediator.Send(new RegisterUserCommand(userDto, token));
         return Ok();
     }
-    
+
     /// <summary>
     /// Login user and return a JWT token.
     /// </summary>
     /// <param name="loginUserDto">login and password</param>
+    /// <param name="token"></param>
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<JwtDto> Login([FromBody] LoginUserDto loginUserDto, CancellationToken token)
     {
         return await _mediator.Send(new AuthenticateUserCommand(loginUserDto, token)); //TODO FIX
     }
-    
+
     /// <summary>
     /// Logout user and invalidate JWT token.
     /// </summary>
     /// <param name="jwtDto">Jwt token</param>
+    /// <param name="token"></param>
     [AllowAnonymous]
     [HttpPost("logout")]
     public async Task<ActionResult> LogOut([FromBody] JwtDto jwtDto, CancellationToken token)
@@ -76,18 +86,19 @@ public class UserController : ControllerBase
     [HttpGet("profile")]
     public async Task<ShowUserDto> GetCurrentUser(CancellationToken token)
     {
-        var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value;
         return await _mediator.Send(new GetUserQuery(Convert.ToInt32(userId), token));
     }
-    
+
     /// <summary>
     /// Updates current user profile.
     /// </summary>
     /// <param name="userDto">Information required to update current user's profile.</param>
+    /// <param name="token"></param>
     [HttpPut("profile")]
     public async Task<ActionResult> UpdateCurrentUser([FromBody] UpdateUserDto userDto, CancellationToken token)
     {
-        var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        var userId = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value;
         await _mediator.Send(new UpdateUserCommand(userDto, Convert.ToInt32(userId), token));
         return Ok();
     }

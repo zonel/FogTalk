@@ -11,11 +11,8 @@ public class JtiRepository : IJtiRepository
 {
     private readonly FogTalkDbContext _dbContext;
 
-    public JtiRepository(FogTalkDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-    
+    public JtiRepository(FogTalkDbContext dbContext) => _dbContext = dbContext;
+
     public async Task<bool> IsJtiBlacklistedAsync(string jti, CancellationToken cancellationToken)
     {
         var jtiEntity = await _dbContext.Jtis.SingleOrDefaultAsync(j => j.JtiValue == jti, cancellationToken);
@@ -37,6 +34,6 @@ public class JtiRepository : IJtiRepository
     public string ExtractJtiFromToken(string jwtToken)
     {
         var token = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-        return token.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+        return token!.Claims!.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
     }
 }

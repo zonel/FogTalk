@@ -4,8 +4,16 @@ using Serilog;
 
 namespace FogTalk.API.Configuration;
 
+/// <summary>
+/// 
+/// </summary>
 public static class ServiceCollection
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {
         #region Serilog

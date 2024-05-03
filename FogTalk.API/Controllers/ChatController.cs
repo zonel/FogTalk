@@ -6,7 +6,6 @@ using FogTalk.Application.Chat.Commands.Update;
 using FogTalk.Application.Chat.Dto;
 using FogTalk.Application.Chat.Queries;
 using FogTalk.Application.Chat.Queries.GetById;
-using FogTalk.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +31,7 @@ public class ChatController : ControllerBase
     {
         _mediator = mediator;
     }
-    
+
     /// <summary>
     /// Creates a new chat.
     /// </summary>
@@ -40,34 +39,37 @@ public class ChatController : ControllerBase
     /// Requires user to pass his JWT token in the header.
     /// </remarks>
     /// <param name="registerChatDto">Dto containing essential information about new chat.</param>
+    /// <param name="token"></param>
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] ChatDto registerChatDto, CancellationToken token)
     {
         await _mediator.Send(new CreateChatCommand(registerChatDto, token));
         return Ok();
     }
-    
+
     /// <summary>
     /// Joins a user to a chat.
     /// </summary>
     /// <param name="chatId">Id of the chat to join.</param>
+    /// <param name="token"></param>
     [HttpPost("join")]
     public async Task<IActionResult> Join([FromBody] int chatId, CancellationToken token)
     {
-            var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+            var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value;
             await _mediator.Send(new JoinChatCommand(Convert.ToInt32(id), chatId, token));
             return Ok();
     }
-    
+
     /// <summary>
     /// Removes a user from a chat.
     /// </summary>
     /// <param name="chatId">Id of the chat to leave from.</param>
+    /// <param name="token"></param>
     /// <returns></returns>
     [HttpPost("leave")]
     public async Task<IActionResult> Leave([FromBody] int chatId, CancellationToken token)
     {
-            var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+            var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value;
             await _mediator.Send(new LeaveChatCommand(Convert.ToInt32(id), chatId, token));
             return Ok();
     }
@@ -81,41 +83,44 @@ public class ChatController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<ChatDto>> GetUserChatsQuery(CancellationToken token)
     {
-        var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value;
+        var id = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value;
         return await _mediator.Send(new GetUserChatsQuery(Convert.ToInt32(id),token));
     }
-    
+
     /// <summary>
     /// Gets details of a chat.
     /// </summary>
     /// <param name="chatId">Id of a chat</param>
+    /// <param name="token"></param>
     [HttpGet("{chatId}")]
     public async Task<ChatDto> GetChatDetails([FromRoute] int chatId, CancellationToken token)
     {
-        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
+        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value);
         return await _mediator.Send(new GetChatByIdQuery(id, chatId, token));
     }
-    
+
     /// <summary>
     /// Updates a chat.
     /// </summary>
-    /// <param name="UpdateChatDto">Dto with ale the parameters to update.</param>
+    /// <param name="updateChatDto">Dto with ale the parameters to update.</param>
+    /// <param name="token"></param>
     [HttpPut]
-    public async Task<IActionResult> UpdateChat([FromBody] UpdateChatDto UpdateChatDto, CancellationToken token)
+    public async Task<IActionResult> UpdateChat([FromBody] UpdateChatDto updateChatDto, CancellationToken token)
     {
-        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
-        await _mediator.Send(new UpdateChatCommand(id ,UpdateChatDto, token));
+        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value);
+        await _mediator.Send(new UpdateChatCommand(id ,updateChatDto, token));
         return Ok();
     }
-    
+
     /// <summary>
     /// Deletes a chat.
     /// </summary>
     /// <param name="chatId">Id of a chat to delete.</param>
+    /// <param name="token"></param>
     [HttpDelete]
     public async Task<IActionResult> DeleteChat([FromBody] int chatId, CancellationToken token)
     {
-        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid).Value);
+        var id = Convert.ToInt32(HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sid)!.Value);
         await _mediator.Send(new DeleteChatCommand(id, chatId, token));
         return Ok();
     }
